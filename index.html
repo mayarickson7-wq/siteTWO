@@ -3,318 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VisionGuard AI | Enterprise Safety Intelligence</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Visionguard AI | Generative Video Orchestration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #00ff9d; /* Neon Green */
-            --secondary: #00b8ff; /* Neon Blue */
-            --bg-dark: #0a0b10;
-            --card-bg: rgba(20, 25, 35, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 255, 157, 0.05) 0%, transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(0, 184, 255, 0.05) 0%, transparent 25%);
-        }
-
-        h1, h2, h3, .navbar-brand {
-            font-family: 'Rajdhani', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: rgba(10, 11, 16, 0.8);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 1rem 0;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: white !important;
-        }
-        
-        .navbar-brand span {
-            color: var(--primary);
-        }
-
-        .btn-custom {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border: none;
-            color: #000;
-            font-weight: 700;
-            padding: 10px 25px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-        }
-
-        .btn-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
-            color: #000;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 120px 0 80px;
-            position: relative;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #fff, #aab);
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #fff; }
+        .gradient-text {
+            background: linear-gradient(90deg, #00f2ff, #0062ff, #7e22ce);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #a0a0b0;
-            max-width: 600px;
-            margin-bottom: 30px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(0, 255, 157, 0.1);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            border: 1px solid rgba(0, 255, 157, 0.3);
-        }
-
-        /* Cards (Glassmorphism) */
         .glass-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 30px;
-            height: 100%;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
-
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            color: var(--secondary);
-            margin-bottom: 20px;
-        }
-
-        /* Tech Stack */
-        .tech-stack-section {
-            padding: 80px 0;
-            background: rgba(255,255,255,0.02);
-        }
-
-        .tech-badge {
-            background: #1a1d26;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-
-        .tech-badge:hover {
-            border-color: var(--secondary);
-            color: var(--secondary);
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--glass-border);
-            padding: 40px 0;
-            margin-top: 50px;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Utilities */
-        .text-neon { color: var(--primary); }
-        .mt-section { margin-top: 100px; }
-        
-        /* Mobile Fixes */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero { padding-top: 80px; }
+        .glass-card:hover { border-color: #00f2ff; transform: translateY(-5px); }
+        .hero-glow {
+            position: absolute; width: 40vw; height: 40vw;
+            background: radial-gradient(circle, rgba(0, 242, 255, 0.15) 0%, rgba(5, 5, 5, 0) 70%);
+            top: -10%; left: 50%; transform: translateX(-50%); z-index: -1;
         }
     </style>
 </head>
-<body>
+<body class="overflow-x-hidden">
 
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">VisionGuard <span>AI</span></a>
-            <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link text-white me-3" href="#platform">Platform</a></li>
-                    <li class="nav-item"><a class="nav-link text-white me-3" href="#technology">Technology</a></li>
-                    <li class="nav-item"><a class="btn btn-custom" href="#contact">Book Demo</a></li>
-                </ul>
-            </div>
+    <div class="hero-glow"></div>
+
+    <nav class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
+        <div class="text-2xl font-bold tracking-tighter">VISIONGUARD <span class="text-[#00f2ff]">AI</span></div>
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
+            <a href="#" class="hover:text-white transition">Platform</a>
+            <a href="#" class="hover:text-white transition">Technology</a>
+            <a href="#" class="hover:text-white transition">Ecosystem</a>
         </div>
+        <a href="mailto:davyd.kurochka@visionguardai.online" class="px-5 py-2 text-sm font-semibold glass-card rounded-full hover:bg-white hover:text-black transition">Request Access</a>
     </nav>
 
-    <section class="hero">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <div class="hero-badge"><i class="fas fa-bolt me-2"></i> Powered by Google Vertex AI</div>
-                    <h1>Automated Workplace<br>Safety Intelligence</h1>
-                    <p>Reduce accidents by 85% with real-time PPE detection and hazard monitoring powered by Computer Vision.</p>
-                    <div class="d-flex gap-3">
-                        <a href="#contact" class="btn btn-custom">Start Pilot Program</a>
-                        <a href="#technology" class="btn btn-outline-light" style="padding: 10px 25px; font-weight: 600;">View Tech Stack</a>
-                    </div>
-                    
-                    <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 d-flex gap-4">
-                        <small class="text-secondary"><i class="fas fa-check-circle me-1 text-neon"></i> GDPR Compliant</small>
-                        <small class="text-secondary"><i class="fas fa-check-circle me-1 text-neon"></i> 99.8% Accuracy</small>
-                    </div>
+    <section class="max-w-5xl mx-auto text-center mt-24 px-4">
+        <div class="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest uppercase glass-card rounded-full text-[#00f2ff]">
+            Powered by NVIDIA & Google Vertex AI
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight">
+            Architecting the Future of <br> <span class="gradient-text">Generative Media.</span>
+        </h1>
+        <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+            ContentOS: The enterprise-grade orchestration engine for automated, high-fidelity video production. Bridging the gap between agentic AI and cinematic delivery.
+        </p>
+        <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+            <button class="px-8 py-4 bg-[#00f2ff] text-black font-bold rounded-lg hover:shadow-[0_0_25px_rgba(0,242,255,0.5)] transition">Start Pilot Program</button>
+            <button class="px-8 py-4 glass-card font-bold rounded-lg">View Infrastructure</button>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-8 py-32">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 mb-6 text-[#00f2ff]">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                 </div>
-                <div class="col-lg-5 d-none d-lg-block">
-                    <div class="glass-card text-center" style="position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--primary); box-shadow: 0 0 15px var(--primary); animation: scan 3s infinite linear;"></div>
-                        <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a783?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="AI Vision" class="img-fluid rounded" style="opacity: 0.6; filter: grayscale(100%) contrast(1.2);">
-                        <div class="mt-3 text-start">
-                            <div class="badge bg-danger mb-2">Alert: Zone Violation</div>
-                            <div class="text-white small font-monospace">Object: Human (98%)<br>Helmet: Not Detected<br>Time: 14:02:55</div>
-                        </div>
-                    </div>
+                <h3 class="text-xl font-bold mb-3">Agentic Pipeline</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">Automated multi-step video synthesis using Gemini 2.0 and proprietary orchestration layers for frame-perfect storytelling.</p>
+            </div>
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 mb-6 text-[#00f2ff]">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </div>
+                <h3 class="text-xl font-bold mb-3">Neural Rendering</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">Direct integration with Google Veo 2.0 and Imagen, optimized on NVIDIA H100 architecture for sub-10ms inference latency.</p>
+            </div>
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="w-12 h-12 mb-6 text-[#00f2ff]">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Infinite Scalability</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">Deploying elastic compute on Google Cloud Platform to handle millions of unique video assets simultaneously.</p>
             </div>
         </div>
     </section>
 
-    <section id="platform" class="container mt-5">
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="glass-card">
-                    <i class="fas fa-hard-hat feature-icon"></i>
-                    <h4>PPE Compliance</h4>
-                    <p class="text-muted">Instantly detect missing helmets, vests, and gloves across multiple video streams.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="glass-card">
-                    <i class="fas fa-video feature-icon" style="color: var(--primary);"></i>
-                    <h4>Hazard Zones</h4>
-                    <p class="text-muted">Geofencing alerts when personnel enter dangerous or restricted heavy-machinery areas.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="glass-card">
-                    <i class="fas fa-chart-line feature-icon"></i>
-                    <h4>Incident Analytics</h4>
-                    <p class="text-muted">Automated OSHA reporting and safety scorecards powered by BigQuery analysis.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="technology" class="tech-stack-section mt-section">
-        <div class="container">
-            <div class="row mb-5">
-                <div class="col-lg-6">
-                    <h2 class="mb-3">Built on Google Cloud</h2>
-                    <p class="text-muted">We leverage state-of-the-art infrastructure to process 4K video streams with < 100ms latency.</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fab fa-google text-neon"></i> Vertex AI</div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fas fa-server text-secondary"></i> Compute Engine T4</div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fas fa-database text-warning"></i> BigQuery</div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fas fa-cloud text-info"></i> Cloud Storage</div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fas fa-code"></i> TensorFlow</div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fas fa-microchip"></i> NVIDIA GPUs</div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fas fa-shield-alt"></i> IAM Security</div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="tech-badge"><i class="fab fa-docker"></i> Kubernetes</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container mt-5 text-center">
-        <p class="text-uppercase text-secondary letter-spacing-2 mb-4">Trusted by Industry Leaders</p>
-        <div class="row justify-content-center opacity-50 grayscale">
-            <div class="col-md-2 col-4 mb-3"><h4>BUILD<span class="text-light">CORP</span></h4></div>
-            <div class="col-md-2 col-4 mb-3"><h4>MEGA<span class="text-light">STRUCT</span></h4></div>
-            <div class="col-md-2 col-4 mb-3"><h4>URBAN<span class="text-light">FORGE</span></h4></div>
-        </div>
-    </section>
-
-    <section id="contact" class="container mt-section mb-5">
-        <div class="glass-card text-center py-5">
-            <h2 class="mb-3">Ready to modernize your safety?</h2>
-            <p class="text-muted mb-4">Join 50+ enterprise teams using VisionGuard AI.</p>
-            <form class="row justify-content-center g-3" onsubmit="event.preventDefault(); alert('Thank you! Your request has been received.');">
-                <div class="col-auto">
-                    <input type="email" class="form-control" placeholder="Work Email" style="background: rgba(255,255,255,0.1); border:none; color:white; padding: 10px 20px;">
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-custom">Request Access</button>
-                </div>
-            </form>
-        </div>
-    </section>
-
-    <footer class="text-center">
-        <div class="container">
-            <p>&copy; 2026 VisionGuard AI Technologies Inc. | San Francisco & Kyiv</p>
-            <p class="small text-muted">All rights reserved. Powered by Google Cloud Platform.</p>
+    <footer class="border-t border-white/10 py-12 px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs uppercase tracking-widest">
+            <div>© 2026 Visionguard AI Technologies Inc. | San Francisco & Kyiv</div>
+            <div class="mt-4 md:mt-0">All rights reserved. Built on Google Cloud Platform.</div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
