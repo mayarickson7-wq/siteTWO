@@ -2,28 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VisionGuard AI | ContentOS - GPU-Native Orchestration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --nv-green: #76b900; --sky-blue: #00f2ff; }
         
-        /* Исправление белого пробела и фиксация фона */
+        /* Исправление фона и пробелов */
         html, body { 
             margin: 0; 
             padding: 0; 
             width: 100%; 
             min-height: 100vh; 
             background-color: #020202; 
-            overflow-x: hidden; 
+            overflow-x: hidden;
         }
 
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020202; color: #ffffff; }
         
         .hero-gradient {
             background: radial-gradient(circle at 50% -20%, rgba(0, 242, 255, 0.15) 0%, rgba(2, 2, 2, 1) 70%), #020202;
-            background-attachment: fixed; /* Чтобы фон не уезжал */
+            background-attachment: fixed;
             min-height: 100vh;
         }
 
@@ -43,21 +43,6 @@
             transform: scale(1.02);
         }
 
-        /* ЯРКИЕ БЕЙДЖИ (как на фото) */
-        .tech-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--sky-blue);
-            padding: 6px 16px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(0, 242, 255, 0.7);
-            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
-            text-transform: uppercase;
-        }
-
         .shimmer {
             background: linear-gradient(90deg, #fff, #888, #fff);
             background-size: 200% auto;
@@ -67,17 +52,32 @@
         }
 
         @keyframes shine { to { background-position: 200% center; } }
+
+        /* ЯРКИЕ БЕЙДЖИ МОДЕЛЕЙ (как на фото) */
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--sky-blue);
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(0, 242, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+            text-transform: uppercase;
+        }
     </style>
 </head>
-<body class="hero-gradient min-h-screen">
+<body class="hero-gradient">
 
     <header class="max-w-7xl mx-auto px-8 py-8 flex justify-between items-center">
         <div class="text-2xl font-extrabold tracking-tighter">
             VISIONGUARD<span class="text-[#00f2ff]">AI</span>
         </div>
         <div class="flex items-center space-x-6">
-            <span class="hidden md:inline text-[10px] font-bold tracking-widest text-gray-500 uppercase">Status: In-Development (Q2 Launch)</span>
-            <a href="mailto:davyd.kurochka@visionguardai.online" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-[#00f2ff] transition duration-300">Contact</a>
+            <span class="hidden md:inline text-[10px] font-bold tracking-widest text-gray-500 uppercase text-xs">Status: Stealth Mode (Q2 Launch)</span>
+            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Access Request" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-[#00f2ff] transition duration-300">Request Access</a>
         </div>
     </header>
 
@@ -103,10 +103,15 @@
             <div class="tech-badge">NVIDIA NIM</div>
             <div class="tech-badge">TENSORRT-LLM</div>
         </div>
+
+        <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Pilot Program Inquiry" class="px-10 py-4 bg-[#00f2ff] text-black font-bold rounded-xl hover:shadow-[0_0_30px_rgba(0,242,255,0.6)] transition">Start Pilot Program</a>
+            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Founders Contact" class="px-10 py-4 glass-panel font-bold rounded-xl text-center text-white">Contact Founders</a>
+        </div>
     </main>
 
     <section class="max-w-7xl mx-auto px-8 pb-32">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
             <div class="glass-panel p-10 rounded-3xl">
                 <div class="text-[#76b900] font-bold text-sm mb-4">ENGINE</div>
                 <h3 class="text-2xl font-bold mb-4 text-white">Multimodal Orchestration</h3>
@@ -131,22 +136,48 @@
         </div>
     </section>
 
-    <section class="max-w-5xl mx-auto px-8 pb-32">
+    <section class="max-w-7xl mx-auto px-8 pb-32">
+        <h3 class="text-center text-3xl font-bold mb-12 text-white uppercase tracking-widest">Roadmap 2026</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
+            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-[#76b900]">
+                <div class="text-xs font-bold text-gray-500 mb-2">Q1 2026</div>
+                <div class="font-bold mb-2 text-white">Alpha Core</div>
+                <p class="text-[11px] text-gray-400">Integration of Veo 3.1 & Gemini 2.5 Flash. Internal testing of ContentOS engine.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-[#00f2ff]">
+                <div class="text-xs font-bold text-gray-500 mb-2">Q2 2026</div>
+                <div class="font-bold mb-2 text-white">Beta Launch</div>
+                <p class="text-[11px] text-gray-400">Infrastructure scaling on NVIDIA H100 clusters. Pilot for YouTube creators.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-purple-500">
+                <div class="text-xs font-bold text-gray-500 mb-2">Q3 2026</div>
+                <div class="font-bold mb-2 text-white">ViralScore 2.0</div>
+                <p class="text-[11px] text-gray-400">Deployment of analytics models via NVIDIA NIM containers.</p>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-white">
+                <div class="text-xs font-bold text-gray-500 mb-2">Q4 2026</div>
+                <div class="font-bold mb-2 text-white">Global API</div>
+                <p class="text-[11px] text-gray-400">Public release of API for enterprise-grade 4K neural rendering.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-5xl mx-auto px-8 pb-32 text-left">
         <div class="bg-gradient-to-b from-white/5 to-transparent p-12 rounded-[40px] border border-white/10">
             <h2 class="text-3xl font-bold mb-12 text-center text-white">Built on the NVIDIA-Google Stack</h2>
-            <div class="space-y-8">
+            <div class="space-y-8 max-w-2xl mx-auto">
                 <div class="flex items-start space-x-6">
                     <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 font-bold text-[#00f2ff]">01</div>
                     <div>
-                        <h4 class="font-bold text-lg text-white">Inference at Scale</h4>
-                        <p class="text-gray-500">Leveraging Vertex AI to deploy Veo 3.1 and Gemini 2.5 Flash for ultra-low latency multimodal generation.</p>
+                        <h4 class="font-bold text-lg text-white text-left">Inference at Scale</h4>
+                        <p class="text-gray-500 text-left">Leveraging Vertex AI to deploy Veo 3.1 and Gemini 2.5 Flash for ultra-low latency multimodal generation.</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-6">
                     <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 font-bold text-[#76b900]">02</div>
                     <div>
-                        <h4 class="font-bold text-lg text-white">NVIDIA Acceleration</h4>
-                        <p class="text-gray-500">Integration with TensorRT-LLM and NVIDIA NIM to optimize our custom ViralScore model inference.</p>
+                        <h4 class="font-bold text-lg text-white text-left">NVIDIA Acceleration</h4>
+                        <p class="text-gray-500 text-left">Integration with TensorRT-LLM and NVIDIA NIM to optimize our custom ViralScore model inference.</p>
                     </div>
                 </div>
             </div>
