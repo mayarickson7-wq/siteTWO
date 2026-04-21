@@ -1,829 +1,837 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ContentOS by VisionGuard AI — The Operating System for AI Content Creators</title>
-    <meta name="description" content="ContentOS eliminates the daily grind for YouTube creators. AI-powered video generation, automated analytics, and intelligent scheduling — so you can focus on strategy, not routine.">
-    <meta name="theme-color" content="#020202">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        heading: ['Space Grotesk', 'sans-serif'],
-                        body: ['DM Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        base: '#020202',
-                        surface: '#0a0a12',
-                        card: '#0f0f1a',
-                        neon: '#00f2ff',
-                        nvidia: '#76b900',
-                        hot: '#e11d48',
-                        muted: '#64748b',
-                    },
-                },
-            },
-        }
-    </script>
-    <style>
-        html, body { margin:0; padding:0; background:#020202; overflow-x:hidden; }
-        body { font-family:'DM Sans',sans-serif; color:#f1f5f9; }
-        h1,h2,h3,h4,h5,h6 { font-family:'Space Grotesk',sans-serif; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContentOS — The Operating System for AI Content Creators</title>
+<meta name="description" content="ContentOS eliminates the daily grind for YouTube creators. AI-powered video generation, automated analytics, zero routine.">
+<meta name="theme-color" content="#050505">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050505;--surface:#0a0a0f;--card:#0d0d14;
+  --cyan:#00f0ff;--violet:#7c3aed;--green:#76b900;--rose:#f43f5e;--gold:#f59e0b;
+  --text:#e2e8f0;--muted:#64748b;--dim:#334155;
+  --font-h:'Space Grotesk',system-ui,sans-serif;
+  --font-b:'Inter',system-ui,sans-serif;
+  --ease:cubic-bezier(.25,.46,.45,.94);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:var(--font-b);color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-h)}
+a{color:inherit;text-decoration:none}
 
-        /* Gradient mesh */
-        .mesh-hero {
-            background:
-                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,242,255,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 50% at 80% 20%, rgba(118,185,0,0.06) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 40% at 50% 80%, rgba(225,29,72,0.04) 0%, transparent 60%),
-                #020202;
-        }
-        .mesh-mid {
-            background:
-                radial-gradient(ellipse 70% 50% at 70% 0%, rgba(0,242,255,0.05) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 10% 60%, rgba(118,185,0,0.04) 0%, transparent 60%),
-                #020202;
-        }
-        .mesh-cta {
-            background:
-                radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,242,255,0.1) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 60% at 20% 80%, rgba(118,185,0,0.06) 0%, transparent 60%),
-                #020202;
-        }
+/* === NOISE GRAIN OVERLAY === */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px 256px;
+}
 
-        /* Glass */
-        .glass {
-            background: rgba(255,255,255,0.02);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .glass-hover { transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); }
-        .glass-hover:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(0,242,255,0.3);
-            box-shadow: 0 0 40px rgba(0,242,255,0.06);
-        }
+/* === AURORA CANVAS === */
+#aurora-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-        /* Glow text */
-        .glow-text {
-            background: linear-gradient(135deg, #00f2ff 0%, #76b900 50%, #00f2ff 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradient-shift 4s ease infinite;
-        }
-        @keyframes gradient-shift {
-            0% { background-position: 0% center; }
-            50% { background-position: 100% center; }
-            100% { background-position: 0% center; }
-        }
+/* === ANIMATED GRID === */
+.grid-bg{
+  position:absolute;inset:0;overflow:hidden;z-index:1;
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 60% 50% at 50% 0%, black 30%, transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse 60% 50% at 50% 0%, black 30%, transparent 70%);
+}
+.grid-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg, transparent 0%, var(--bg) 100%);
+}
 
-        /* Neon line */
-        .neon-line {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,242,255,0.5), transparent);
-        }
+/* === REVEAL SYSTEM === */
+[data-reveal]{opacity:0;transform:translateY(40px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
+[data-reveal].is-visible{opacity:1;transform:translateY(0)}
+[data-reveal-delay="1"]{transition-delay:.1s}
+[data-reveal-delay="2"]{transition-delay:.2s}
+[data-reveal-delay="3"]{transition-delay:.3s}
+[data-reveal-delay="4"]{transition-delay:.4s}
+[data-reveal-delay="5"]{transition-delay:.5s}
 
-        /* Badge glow */
-        .badge-glow {
-            box-shadow: 0 0 12px rgba(0,242,255,0.15), inset 0 0 12px rgba(0,242,255,0.05);
-        }
+/* === FLOATING NAV === */
+.nav{
+  position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:100;
+  width:min(calc(100% - 2rem),72rem);
+  padding:.75rem 1.5rem;
+  background:rgba(5,5,5,.6);
+  backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.06);border-radius:1rem;
+  transition:all .4s var(--ease);
+}
+.nav.scrolled{background:rgba(5,5,5,.85);border-color:rgba(255,255,255,.1)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--font-h);font-weight:700;font-size:1.1rem;letter-spacing:-.03em}
+.logo span{color:var(--cyan)}
+.nav-links{display:flex;gap:2rem;font-size:.85rem;color:var(--muted)}
+.nav-links a{transition:color .2s;cursor:pointer}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  padding:.5rem 1.25rem;border-radius:.75rem;font-size:.8rem;font-weight:600;
+  background:linear-gradient(135deg,var(--cyan),#0090ff);color:#000;
+  transition:all .3s var(--ease);cursor:pointer;
+}
+.nav-cta:hover{box-shadow:0 0 30px rgba(0,240,255,.35);transform:translateY(-1px)}
+.inception-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.25rem .65rem;border-radius:.5rem;
+  border:1px solid rgba(118,185,0,.3);background:rgba(118,185,0,.06);
+  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);
+}
+.inception-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-        /* Floating nav */
-        .nav-float {
-            background: rgba(2,2,2,0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: all 0.3s ease;
-        }
-        .nav-float.scrolled {
-            background: rgba(2,2,2,0.9);
-            border-color: rgba(255,255,255,0.1);
-        }
+/* === HERO === */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:8rem 1.5rem 6rem;z-index:2}
+.hero-content{max-width:72rem;margin:0 auto;width:100%;text-align:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.5rem 1.25rem;border-radius:2rem;
+  background:rgba(0,240,255,.05);border:1px solid rgba(0,240,255,.15);
+  font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,240,255,.8);
+  margin-bottom:2.5rem;
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 2s infinite}
+.hero h1{
+  font-size:clamp(3rem,8vw,6.5rem);font-weight:700;line-height:1;letter-spacing:-.04em;
+  margin-bottom:2rem;
+}
+.hero h1 .gradient-text{
+  background:linear-gradient(135deg,var(--cyan) 0%,var(--violet) 40%,var(--rose) 70%,var(--cyan) 100%);
+  background-size:300% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:gradient-flow 6s ease infinite;
+}
+@keyframes gradient-flow{0%{background-position:0% center}50%{background-position:100% center}100%{background-position:0% center}}
+.hero-sub{
+  font-size:clamp(1.1rem,2.5vw,1.45rem);color:var(--muted);
+  max-width:42rem;margin:0 auto 3rem;line-height:1.7;font-weight:400;
+}
+.hero-sub strong{color:#fff;font-weight:600}
+.hero-buttons{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:4rem}
+.btn-primary{
+  padding:.9rem 2rem;border-radius:.875rem;font-size:.95rem;font-weight:600;
+  background:linear-gradient(135deg,var(--cyan),#0080ee);color:#000;
+  transition:all .35s var(--ease);cursor:pointer;border:none;
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.2) 50%,transparent 60%);
+  background-size:200%;background-position:-100%;
+  transition:background-position .6s;
+}
+.btn-primary:hover::before{background-position:200%}
+.btn-primary:hover{box-shadow:0 0 40px rgba(0,240,255,.4),0 0 80px rgba(0,240,255,.15);transform:translateY(-2px)}
+.btn-ghost{
+  padding:.9rem 2rem;border-radius:.875rem;font-size:.95rem;font-weight:600;
+  border:1px solid rgba(255,255,255,.12);color:#fff;
+  transition:all .35s var(--ease);cursor:pointer;background:transparent;
+}
+.btn-ghost:hover{border-color:rgba(0,240,255,.4);background:rgba(0,240,255,.04)}
 
-        /* Reveal on scroll */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.25,0.46,0.45,0.94),
-                        transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* === MARQUEE TICKER === */
+.ticker-section{position:relative;z-index:2;padding:0 0 6rem;overflow:hidden}
+.ticker-track{
+  display:flex;gap:3rem;animation:ticker 30s linear infinite;width:max-content;
+}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{
+  font-family:var(--font-h);font-size:.8rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--dim);white-space:nowrap;transition:color .3s;cursor:default;
+  display:flex;align-items:center;gap:.6rem;
+}
+.ticker-item:hover{color:var(--cyan)}
+.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--dim);flex-shrink:0}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-        /* Staggered children */
-        .reveal-stagger .reveal-child {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .reveal-stagger.visible .reveal-child {
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* === SECTION STYLING === */
+section{position:relative;z-index:2}
+.section-pad{padding:8rem 1.5rem}
+.container{max-width:72rem;margin:0 auto}
+.section-label{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.35rem 1rem;border-radius:2rem;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:1.5rem;
+}
+.section-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.25rem}
+.section-desc{font-size:1.1rem;color:var(--muted);max-width:36rem;line-height:1.7}
 
-        /* Pulse ring */
-        .pulse-ring {
-            animation: pulse-ring 2.5s cubic-bezier(0.215,0.61,0.355,1) infinite;
-        }
-        @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(0,242,255,0.4); }
-            70% { box-shadow: 0 0 0 12px rgba(0,242,255,0); }
-            100% { box-shadow: 0 0 0 0 rgba(0,242,255,0); }
-        }
+/* === GLOW DIVIDER === */
+.glow-divider{
+  height:1px;border:none;
+  background:linear-gradient(90deg,transparent,rgba(0,240,255,.25) 30%,rgba(124,58,237,.25) 70%,transparent);
+  margin:0 auto;max-width:40rem;
+}
 
-        /* Counter animation */
-        .counter { font-variant-numeric: tabular-nums; }
+/* === PAIN SECTION === */
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+.pain-card{
+  padding:2.5rem;border-radius:1.25rem;
+  background:var(--card);border:1px solid rgba(255,255,255,.04);
+  transition:all .5s var(--ease);cursor:pointer;position:relative;overflow:hidden;
+}
+.pain-card::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,transparent 40%,rgba(0,240,255,.03));
+  opacity:0;transition:opacity .5s;
+}
+.pain-card:hover{border-color:rgba(0,240,255,.15);transform:translateY(-4px)}
+.pain-card:hover::before{opacity:1}
+.pain-icon{
+  width:3rem;height:3rem;border-radius:.875rem;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.5rem;font-size:1.3rem;
+}
+.pain-card h3{font-size:1.2rem;font-weight:700;margin-bottom:.75rem}
+.pain-card p{font-size:.9rem;color:var(--muted);line-height:1.65}
 
-        /* Bento grid */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-auto-rows: minmax(200px, auto);
-            gap: 1.5rem;
-        }
-        .bento-wide { grid-column: span 2; }
-        .bento-tall { grid-row: span 2; }
-        @media (max-width: 768px) {
-            .bento-grid { grid-template-columns: 1fr; }
-            .bento-wide, .bento-tall { grid-column: span 1; grid-row: span 1; }
-        }
+/* === BENTO FEATURES === */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:1.25rem;margin-top:3.5rem}
+.bento-card{
+  padding:2.5rem;border-radius:1.5rem;
+  background:var(--card);border:1px solid rgba(255,255,255,.04);
+  position:relative;overflow:hidden;
+  transition:all .5s var(--ease);cursor:pointer;
+}
+.bento-card:hover{border-color:rgba(0,240,255,.12);transform:translateY(-3px)}
+/* Animated gradient border on hover */
+.bento-card::after{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;z-index:-1;
+  background:conic-gradient(from 0deg,var(--cyan),var(--violet),var(--rose),var(--cyan));
+  opacity:0;transition:opacity .5s;
+}
+.bento-card:hover::after{opacity:.15}
+.bento-hero{grid-column:span 8}
+.bento-side{grid-column:span 4}
+.bento-third{grid-column:span 4}
+.bento-half{grid-column:span 6}
+.bento-label{
+  font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;
+}
+.bento-card h3{font-size:1.4rem;font-weight:700;margin-bottom:.75rem;letter-spacing:-.02em}
+.bento-card p{font-size:.9rem;color:var(--muted);line-height:1.65}
+.bento-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.5rem}
+.bento-tag{
+  font-size:.65rem;font-weight:600;padding:.3rem .7rem;border-radius:.5rem;
+  background:rgba(255,255,255,.04);color:var(--muted);letter-spacing:.03em;
+}
+.bento-features{list-style:none;margin-top:1.25rem;display:flex;flex-direction:column;gap:.65rem}
+.bento-features li{
+  display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--muted)
+}
+.bento-features .icon{
+  width:1.25rem;height:1.25rem;border-radius:.375rem;
+  display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;
+}
 
-        /* Roadmap line */
-        .roadmap-line {
-            position: absolute;
-            left: 24px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(180deg, rgba(0,242,255,0.5) 0%, rgba(118,185,0,0.5) 50%, rgba(225,29,72,0.3) 100%);
-        }
+/* === STEPS === */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:4rem}
+.step{position:relative;padding:2rem;cursor:pointer}
+.step-num{
+  font-family:var(--font-h);font-size:4rem;font-weight:700;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),transparent);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;margin-bottom:1rem;
+}
+.step h3{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.step p{font-size:.85rem;color:var(--muted);line-height:1.6}
+.step-line{
+  position:absolute;top:3rem;right:0;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06));
+}
 
-        /* CTA button */
-        .cta-btn {
-            background: linear-gradient(135deg, #00f2ff 0%, #00c8d4 100%);
-            color: #020202;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .cta-btn:hover {
-            box-shadow: 0 0 30px rgba(0,242,255,0.4), 0 0 60px rgba(0,242,255,0.15);
-            transform: translateY(-2px);
-        }
+/* === METRICS === */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:4rem}
+.metric{text-align:center}
+.metric-value{
+  font-family:var(--font-h);font-size:clamp(2.5rem,5vw,3.5rem);font-weight:700;
+  letter-spacing:-.03em;margin-bottom:.25rem;font-variant-numeric:tabular-nums;
+}
+.metric-label{font-size:.85rem;color:var(--muted)}
 
-        /* Secondary button */
-        .btn-outline {
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #f1f5f9;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .btn-outline:hover {
-            border-color: rgba(0,242,255,0.5);
-            background: rgba(0,242,255,0.05);
-        }
+/* === TECH PARTNERS === */
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3.5rem}
+.tech-card{
+  padding:2.5rem;border-radius:1.5rem;
+  background:var(--card);border:1px solid rgba(255,255,255,.04);
+  transition:all .5s var(--ease);cursor:pointer;
+}
+.tech-card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-3px)}
+.tech-card-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.tech-logo{
+  width:3rem;height:3rem;border-radius:.875rem;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-h);font-weight:700;font-size:1.2rem;
+}
+.tech-card h3{font-size:1.2rem;font-weight:700}
+.tech-card .tag{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tech-items{display:flex;flex-direction:column;gap:.6rem}
+.tech-item{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--muted)}
+.tech-item-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 
-        /* reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            .reveal { opacity: 1; transform: none; }
-            .reveal-stagger .reveal-child { opacity: 1; transform: none; }
-        }
+/* === ROADMAP === */
+.roadmap{position:relative;margin-top:4rem;padding-left:3rem}
+.roadmap-line{
+  position:absolute;left:.75rem;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--cyan),var(--violet),var(--rose),var(--dim));
+}
+.rm-item{position:relative;padding-bottom:3rem}
+.rm-item:last-child{padding-bottom:0}
+.rm-dot{
+  position:absolute;left:-2.55rem;top:.25rem;
+  width:1.1rem;height:1.1rem;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.rm-dot-inner{width:.4rem;height:.4rem;border-radius:50%}
+.rm-date{font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem}
+.rm-status{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-left:.5rem}
+.rm-item h4{font-size:1.1rem;font-weight:700;margin-bottom:.35rem}
+.rm-item p{font-size:.85rem;color:var(--muted);line-height:1.6;max-width:36rem}
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #020202; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-    </style>
+/* === CTA SECTION === */
+.cta-section{
+  background:radial-gradient(ellipse 80% 70% at 50% 60%,rgba(0,240,255,.07),transparent 60%),
+             radial-gradient(ellipse 60% 50% at 30% 40%,rgba(124,58,237,.05),transparent 50%),
+             var(--bg);
+}
+.cta-section h2{font-size:clamp(2rem,5vw,3.5rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.5rem}
+
+/* === FOOTER === */
+footer{border-top:1px solid rgba(255,255,255,.04);padding:3rem 1.5rem}
+.footer-inner{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+  max-width:72rem;margin:0 auto;
+}
+.footer-inner>*{font-size:.75rem;color:var(--muted)}
+
+/* === RESPONSIVE === */
+@media(max-width:1024px){
+  .bento-hero,.bento-side{grid-column:span 12}
+  .bento-third{grid-column:span 6}
+  .pain-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .nav-links{display:none}
+}
+@media(max-width:768px){
+  .bento-third,.bento-half{grid-column:span 12}
+  .pain-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .tech-grid{grid-template-columns:1fr}
+  .section-pad{padding:5rem 1.25rem}
+}
+@media(max-width:480px){
+  .metrics{grid-template-columns:1fr}
+  .hero-buttons{flex-direction:column;align-items:center}
+}
+
+/* === REDUCED MOTION === */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  [data-reveal]{opacity:1;transform:none}
+  .ticker-track{animation:none}
+}
+</style>
 </head>
 <body>
 
-<!-- ==================== NAV ==================== -->
-<nav id="nav" class="nav-float fixed top-4 left-4 right-4 z-50 rounded-2xl px-4 sm:px-6 lg:px-8 py-3">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex items-center gap-4">
-            <a href="#" class="text-xl font-heading font-bold tracking-tight">
-                VISIONGUARD<span class="text-neon">AI</span>
-            </a>
-            <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg border border-nvidia/30 bg-nvidia/5">
-                <span class="w-1.5 h-1.5 bg-nvidia rounded-full animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-nvidia uppercase">NVIDIA Inception</span>
-            </div>
-        </div>
-        <div class="hidden md:flex items-center gap-8 text-sm text-muted font-medium">
-            <a href="#features" class="hover:text-white transition-colors duration-200 cursor-pointer">Features</a>
-            <a href="#technology" class="hover:text-white transition-colors duration-200 cursor-pointer">Technology</a>
-            <a href="#roadmap" class="hover:text-white transition-colors duration-200 cursor-pointer">Roadmap</a>
-        </div>
-        <div class="flex items-center gap-3">
-            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access Request" class="cta-btn px-5 py-2 rounded-xl text-sm">
-                Get Early Access
-            </a>
-        </div>
+<!-- Aurora Canvas -->
+<canvas id="aurora-canvas"></canvas>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <a href="#" class="logo">CONTENT<span>OS</span></a>
+      <div class="inception-badge" style="display:none" id="inception-badge">
+        <span class="inception-dot"></span> NVIDIA Inception
+      </div>
     </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How It Works</a>
+      <a href="#tech">Technology</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+    <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access" class="nav-cta">Get Early Access</a>
+  </div>
 </nav>
 
-<!-- ==================== HERO ==================== -->
-<section class="mesh-hero min-h-screen flex items-center pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto w-full">
-        <div class="max-w-4xl mx-auto text-center">
-            <!-- Status badge -->
-            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-5 py-2 mb-8 badge-glow">
-                <span class="w-2 h-2 bg-neon rounded-full pulse-ring"></span>
-                <span class="text-xs font-bold tracking-widest uppercase text-slate-300">Now in Private Beta</span>
-            </div>
-
-            <!-- Heading -->
-            <h1 class="reveal text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-heading font-bold tracking-tight leading-[1.05] mb-8">
-                Zero Routine.<br>
-                <span class="glow-text">Pure Strategy.</span>
-            </h1>
-
-            <!-- Subheading -->
-            <p class="reveal text-lg sm:text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed mb-10">
-                <span class="text-white font-semibold">ContentOS</span> eliminates the daily grind for YouTube creators. AI generates your videos, analyzes competitors, and optimizes everything &mdash; so you focus on growing your empire.
-            </p>
-
-            <!-- CTA buttons -->
-            <div class="reveal flex flex-col sm:flex-row justify-center gap-4 mb-16">
-                <a href="mailto:davyd.kurochka@visionguardai.online?subject=Pilot Program" class="cta-btn px-8 py-4 rounded-xl text-base">
-                    Join the Pilot Program
-                </a>
-                <a href="#features" class="btn-outline px-8 py-4 rounded-xl text-base">
-                    See How It Works
-                </a>
-            </div>
-
-            <!-- Tech badges -->
-            <div class="reveal flex flex-wrap justify-center gap-3">
-                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-neon/20">FLUX 2 Dev</div>
-                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-neon/20">LTX-2.3</div>
-                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-nvidia/20">NVIDIA L40S</div>
-                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-nvidia/20">TensorRT-LLM</div>
-                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-white/10">AWS Bedrock</div>
-            </div>
-        </div>
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge" data-reveal>
+      <span class="dot"></span> Private Beta &mdash; Limited Access
     </div>
+    <h1 data-reveal data-reveal-delay="1">
+      Kill the Routine.<br><span class="gradient-text">Own the Strategy.</span>
+    </h1>
+    <p class="hero-sub" data-reveal data-reveal-delay="2">
+      <strong>ContentOS</strong> is the AI operating system that generates cinematic videos, analyzes your competitors, and manages your channels &mdash; so you can think bigger instead of editing longer.
+    </p>
+    <div class="hero-buttons" data-reveal data-reveal-delay="3">
+      <a href="mailto:davyd.kurochka@visionguardai.online?subject=Pilot Program" class="btn-primary">Join the Pilot</a>
+      <a href="#how" class="btn-ghost">See How It Works</a>
+    </div>
+  </div>
 </section>
 
-<!-- ==================== PAIN POINTS ==================== -->
-<section class="px-4 sm:px-6 lg:px-8 pb-32">
-    <div class="max-w-6xl mx-auto">
-        <div class="neon-line mb-20"></div>
-        <div class="text-center mb-16">
-            <h2 class="reveal text-3xl sm:text-4xl font-heading font-bold mb-4">YouTube is a Full-Time Job.</h2>
-            <p class="reveal text-lg text-slate-400 max-w-2xl mx-auto">Creators spend <span class="text-white font-semibold">80% of their time on repetitive tasks</span> instead of creative strategy. ContentOS flips that equation.</p>
-        </div>
-        <div class="reveal-stagger grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="reveal-child glass glass-hover rounded-2xl p-8 text-center cursor-pointer">
-                <div class="w-12 h-12 rounded-xl bg-hot/10 border border-hot/20 flex items-center justify-center mx-auto mb-5">
-                    <i data-lucide="clock" class="w-6 h-6 text-hot"></i>
-                </div>
-                <h3 class="font-heading font-bold text-lg mb-3">Hours on Editing</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Scripting, filming, editing, thumbnails, SEO, scheduling. Every single video. Every single day.</p>
-            </div>
-            <div class="reveal-child glass glass-hover rounded-2xl p-8 text-center cursor-pointer" style="transition-delay:0.1s">
-                <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center mx-auto mb-5">
-                    <i data-lucide="bar-chart-3" class="w-6 h-6 text-neon"></i>
-                </div>
-                <h3 class="font-heading font-bold text-lg mb-3">Blind Analytics</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Manually tracking competitors, guessing what works, missing trends until it's too late.</p>
-            </div>
-            <div class="reveal-child glass glass-hover rounded-2xl p-8 text-center cursor-pointer" style="transition-delay:0.2s">
-                <div class="w-12 h-12 rounded-xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center mx-auto mb-5">
-                    <i data-lucide="brain" class="w-6 h-6 text-nvidia"></i>
-                </div>
-                <h3 class="font-heading font-bold text-lg mb-3">No Time to Think</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Creative burnout is real. When 100% of your day is execution, strategy never happens.</p>
-            </div>
-        </div>
+<!-- ===== MARQUEE TICKER ===== -->
+<div class="ticker-section">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item"><span class="ticker-dot"></span>FLUX 2 Dev</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>LTX-2.3</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Qwen Edit</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>NVIDIA L40S</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>TensorRT-LLM</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AWS Bedrock</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>ComfyUI</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Claude Opus</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>NVIDIA NIM</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>FFmpeg</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><span class="ticker-dot"></span>FLUX 2 Dev</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>LTX-2.3</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Qwen Edit</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>NVIDIA L40S</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>TensorRT-LLM</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AWS Bedrock</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>ComfyUI</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Claude Opus</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>NVIDIA NIM</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>FFmpeg</span>
+  </div>
+</div>
+
+<!-- ===== DIVIDER ===== -->
+<hr class="glow-divider">
+
+<!-- ===== PAIN POINTS ===== -->
+<section class="section-pad">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-label" data-reveal><span style="color:var(--rose)">Problem</span></div>
+      <h2 class="section-title" data-reveal data-reveal-delay="1">YouTube Is a Full-Time Job.<br>It Shouldn't Be.</h2>
+      <p class="section-desc" style="margin:0 auto" data-reveal data-reveal-delay="2">Creators spend 80% of their time on tasks a machine should do. The creative spark drowns in routine.</p>
     </div>
+    <div class="pain-grid">
+      <div class="pain-card" data-reveal>
+        <div class="pain-icon" style="background:rgba(244,63,94,.08);color:var(--rose)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>40+ Hours/Week on Editing</h3>
+        <p>Scripting, filming, cutting, color grading, thumbnails, descriptions, tags, scheduling. Every. Single. Video.</p>
+      </div>
+      <div class="pain-card" data-reveal data-reveal-delay="1">
+        <div class="pain-icon" style="background:rgba(0,240,255,.08);color:var(--cyan)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+        </div>
+        <h3>Blind to Competitors</h3>
+        <p>By the time you notice a trend, it's already peaked. Manual analytics means you're always reacting, never leading.</p>
+      </div>
+      <div class="pain-card" data-reveal data-reveal-delay="2">
+        <div class="pain-icon" style="background:rgba(124,58,237,.08);color:var(--violet)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>Burnout, Not Strategy</h3>
+        <p>When 100% of your energy goes to execution, there's nothing left for the thinking that actually grows your channel.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ==================== FEATURES (Bento Grid) ==================== -->
-<section id="features" class="mesh-mid px-4 sm:px-6 lg:px-8 py-32">
-    <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-16">
-            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Platform</span>
-            </div>
-            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4">One Platform.<br>Everything Automated.</h2>
-            <p class="reveal text-lg text-slate-400 max-w-2xl mx-auto">From concept to published video &mdash; ContentOS handles the entire pipeline while you make the creative decisions.</p>
-        </div>
-
-        <div class="bento-grid reveal-stagger">
-            <!-- AI Video Generation (wide) -->
-            <div class="reveal-child bento-wide glass glass-hover rounded-3xl p-8 flex flex-col justify-between cursor-pointer">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center">
-                            <i data-lucide="film" class="w-5 h-5 text-neon"></i>
-                        </div>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Core Engine</span>
-                    </div>
-                    <h3 class="font-heading font-bold text-2xl mb-3">AI Video Generation</h3>
-                    <p class="text-slate-400 leading-relaxed">Cinematic quality videos generated from a single text prompt. Our multi-model pipeline orchestrates FLUX 2, Qwen Edit, and LTX-2.3 to produce Pixar-level animated content autonomously.</p>
-                </div>
-                <div class="flex flex-wrap gap-2 mt-6">
-                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">4K Output</span>
-                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">10+ Minutes</span>
-                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">Character Consistency</span>
-                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">Multi-Scene</span>
-                </div>
-            </div>
-
-            <!-- Universe System (tall) -->
-            <div class="reveal-child bento-tall glass glass-hover rounded-3xl p-8 flex flex-col justify-between cursor-pointer" style="transition-delay:0.1s">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                            <i data-lucide="globe" class="w-5 h-5 text-purple-400"></i>
-                        </div>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-purple-400">World Building</span>
-                    </div>
-                    <h3 class="font-heading font-bold text-2xl mb-3">Universe System</h3>
-                    <p class="text-slate-400 leading-relaxed">Build persistent worlds with characters, locations, props, and styles. Every entity maintains visual consistency across all your videos &mdash; just like a real animation studio.</p>
-                </div>
-                <div class="space-y-3 mt-6">
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="user" class="w-4 h-4 text-purple-400 shrink-0"></i>
-                        <span>8-angle character turntables</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-purple-400 shrink-0"></i>
-                        <span>Panoramic locations</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="box" class="w-4 h-4 text-purple-400 shrink-0"></i>
-                        <span>Prop library</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="palette" class="w-4 h-4 text-purple-400 shrink-0"></i>
-                        <span>Visual style templates</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ViralScore Analytics -->
-            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.15s">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center">
-                        <i data-lucide="trending-up" class="w-5 h-5 text-nvidia"></i>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-widest uppercase text-nvidia">Intelligence</span>
-                </div>
-                <h3 class="font-heading font-bold text-xl mb-3">ViralScore Analytics</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">AI-powered prediction engine that analyzes market trends, competitor content, and audience behavior to architect every video for maximum retention.</p>
-            </div>
-
-            <!-- Competitor Autopilot -->
-            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.2s">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-hot/10 border border-hot/20 flex items-center justify-center">
-                        <i data-lucide="radar" class="w-5 h-5 text-hot"></i>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-widest uppercase text-hot">Automation</span>
-                </div>
-                <h3 class="font-heading font-bold text-xl mb-3">Competitor Autopilot</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Automated competitor monitoring. Track niches, detect emerging trends, and get actionable insights &mdash; before your competitors see them.</p>
-            </div>
-
-            <!-- Smart Publishing (wide) -->
-            <div class="reveal-child bento-wide glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.25s">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
-                        <i data-lucide="upload-cloud" class="w-5 h-5 text-sky-400"></i>
-                    </div>
-                    <span class="text-[10px] font-bold tracking-widest uppercase text-sky-400">End to End</span>
-                </div>
-                <h3 class="font-heading font-bold text-2xl mb-3">Script to Publish &mdash; Zero Touch</h3>
-                <p class="text-slate-400 leading-relaxed max-w-xl">AI writes the script, generates the video, creates SEO-optimized titles and descriptions, designs thumbnails, and schedules publishing at the optimal time. Your only job: approve and watch it go live.</p>
-            </div>
-        </div>
+<!-- ===== FEATURES BENTO ===== -->
+<section id="features" class="section-pad" style="background:var(--surface)">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-label" data-reveal><span style="color:var(--cyan)">Platform</span></div>
+      <h2 class="section-title" data-reveal data-reveal-delay="1">One Platform. Everything Automated.</h2>
+      <p class="section-desc" style="margin:0 auto" data-reveal data-reveal-delay="2">From concept to published video &mdash; ContentOS handles the entire pipeline while you make the decisions that matter.</p>
     </div>
+    <div class="bento">
+      <!-- AI Video Gen (wide) -->
+      <div class="bento-card bento-hero" data-reveal>
+        <div class="bento-label" style="color:var(--cyan)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="2.18"/><path d="m10 8 6 4-6 4V8z"/></svg>
+          Core Engine
+        </div>
+        <h3>AI Video Generation</h3>
+        <p>Cinematic quality videos from a text prompt. Our multi-model pipeline orchestrates image generation, scene compositing, and video synthesis to produce Pixar-level animated content &mdash; fully autonomously.</p>
+        <div class="bento-tags">
+          <span class="bento-tag">4K Output</span>
+          <span class="bento-tag">10+ Min</span>
+          <span class="bento-tag">Character Consistency</span>
+          <span class="bento-tag">Multi-Scene</span>
+          <span class="bento-tag">Auto Audio</span>
+        </div>
+      </div>
+      <!-- Universe (side) -->
+      <div class="bento-card bento-side" data-reveal data-reveal-delay="1">
+        <div class="bento-label" style="color:var(--violet)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          World Building
+        </div>
+        <h3>Universe System</h3>
+        <p>Persistent worlds with characters, locations, and props that stay visually consistent across all videos.</p>
+        <ul class="bento-features">
+          <li><span class="icon" style="background:rgba(124,58,237,.1);color:var(--violet)">8</span> angle character refs</li>
+          <li><span class="icon" style="background:rgba(124,58,237,.1);color:var(--violet)">P</span> panoramic locations</li>
+          <li><span class="icon" style="background:rgba(124,58,237,.1);color:var(--violet)">S</span> style templates</li>
+        </ul>
+      </div>
+      <!-- ViralScore -->
+      <div class="bento-card bento-third" data-reveal data-reveal-delay="1">
+        <div class="bento-label" style="color:var(--green)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          Intelligence
+        </div>
+        <h3>ViralScore</h3>
+        <p>Predictive analytics engine that scores your content before you publish. Real-time trend detection across niches.</p>
+      </div>
+      <!-- Competitor Autopilot -->
+      <div class="bento-card bento-third" data-reveal data-reveal-delay="2">
+        <div class="bento-label" style="color:var(--rose)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg>
+          Automation
+        </div>
+        <h3>Competitor Radar</h3>
+        <p>Track any channel. Detect emerging trends and content gaps automatically. Get actionable insights before competitors do.</p>
+      </div>
+      <!-- Zero-Touch Publish -->
+      <div class="bento-card bento-third" data-reveal data-reveal-delay="3">
+        <div class="bento-label" style="color:var(--gold)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+          End-to-End
+        </div>
+        <h3>Zero-Touch Publish</h3>
+        <p>AI writes SEO titles, descriptions, tags. Generates thumbnails. Schedules at optimal time. You just approve.</p>
+      </div>
+      <!-- Niche Finder (wide bottom) -->
+      <div class="bento-card bento-half" data-reveal data-reveal-delay="2">
+        <div class="bento-label" style="color:var(--cyan)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Discovery
+        </div>
+        <h3>Niche Hunter</h3>
+        <p>Find untapped niches with high demand and low competition. AI scans millions of data points to surface opportunities you'd never find manually.</p>
+      </div>
+      <div class="bento-card bento-half" data-reveal data-reveal-delay="3">
+        <div class="bento-label" style="color:var(--violet)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Multi-Channel
+        </div>
+        <h3>Channel Empire</h3>
+        <p>Manage multiple YouTube channels from one dashboard. Each channel gets its own Universe, its own strategy, its own voice &mdash; all orchestrated by a single AI director.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ==================== HOW IT WORKS ==================== -->
-<section class="px-4 sm:px-6 lg:px-8 py-32">
-    <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-20">
-            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Workflow</span>
-            </div>
-            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold">From Idea to Upload<br>in <span class="text-neon">Four Steps</span></h2>
-        </div>
-
-        <div class="space-y-12 reveal-stagger">
-            <div class="reveal-child flex items-start gap-6 md:gap-8">
-                <div class="w-14 h-14 rounded-2xl bg-neon/10 border border-neon/20 flex items-center justify-center shrink-0">
-                    <span class="font-heading font-bold text-xl text-neon">01</span>
-                </div>
-                <div>
-                    <h3 class="font-heading font-bold text-xl mb-2">Describe Your Vision</h3>
-                    <p class="text-slate-400 leading-relaxed">Tell ContentOS what you want in plain language. "A 12-minute animated story about a robot learning to paint, Pixar style, with three main characters." That's it.</p>
-                </div>
-            </div>
-            <div class="reveal-child flex items-start gap-6 md:gap-8" style="transition-delay:0.1s">
-                <div class="w-14 h-14 rounded-2xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center shrink-0">
-                    <span class="font-heading font-bold text-xl text-nvidia">02</span>
-                </div>
-                <div>
-                    <h3 class="font-heading font-bold text-xl mb-2">AI Builds the Shot Graph</h3>
-                    <p class="text-slate-400 leading-relaxed">Our Director AI breaks your story into scenes, plans camera angles, selects locations from your Universe, and creates a complete production timeline &mdash; like a real film pre-production.</p>
-                </div>
-            </div>
-            <div class="reveal-child flex items-start gap-6 md:gap-8" style="transition-delay:0.2s">
-                <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-                    <span class="font-heading font-bold text-xl text-purple-400">03</span>
-                </div>
-                <div>
-                    <h3 class="font-heading font-bold text-xl mb-2">GPU Cluster Renders</h3>
-                    <p class="text-slate-400 leading-relaxed">4 NVIDIA L40S GPUs render keyframes, composite characters into scenes, and generate video segments in parallel. Multi-model pipeline: FLUX for images, Qwen for editing, LTX for video.</p>
-                </div>
-            </div>
-            <div class="reveal-child flex items-start gap-6 md:gap-8" style="transition-delay:0.3s">
-                <div class="w-14 h-14 rounded-2xl bg-hot/10 border border-hot/20 flex items-center justify-center shrink-0">
-                    <span class="font-heading font-bold text-xl text-hot">04</span>
-                </div>
-                <div>
-                    <h3 class="font-heading font-bold text-xl mb-2">Review, Approve, Publish</h3>
-                    <p class="text-slate-400 leading-relaxed">Watch your video, tweak if needed, and hit publish. ContentOS handles SEO, thumbnail, description, tags, and scheduling. Your content goes live while you plan the next one.</p>
-                </div>
-            </div>
-        </div>
+<!-- ===== HOW IT WORKS ===== -->
+<section id="how" class="section-pad">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-label" data-reveal><span style="color:var(--cyan)">Workflow</span></div>
+      <h2 class="section-title" data-reveal data-reveal-delay="1">Idea to Upload. <span style="color:var(--cyan)">Four Steps.</span></h2>
     </div>
+    <div class="steps">
+      <div class="step" data-reveal>
+        <div class="step-num">01</div>
+        <h3>Describe Your Vision</h3>
+        <p>"A 12-minute animated story about a robot learning empathy, Pixar style." That's all ContentOS needs.</p>
+      </div>
+      <div class="step" data-reveal data-reveal-delay="1">
+        <div class="step-num">02</div>
+        <h3>AI Plans Production</h3>
+        <p>Director AI breaks your story into scenes, plans camera angles, selects Universe locations, builds a Shot Graph.</p>
+      </div>
+      <div class="step" data-reveal data-reveal-delay="2">
+        <div class="step-num">03</div>
+        <h3>GPU Cluster Renders</h3>
+        <p>4 NVIDIA L40S GPUs render keyframes, composite characters, and generate video in parallel. Minutes, not days.</p>
+      </div>
+      <div class="step" data-reveal data-reveal-delay="3">
+        <div class="step-num">04</div>
+        <h3>Review & Publish</h3>
+        <p>Watch, tweak if needed, approve. SEO, thumbnail, description, scheduling &mdash; all handled. You're already planning the next one.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ==================== NUMBERS ==================== -->
-<section class="px-4 sm:px-6 lg:px-8 pb-32">
-    <div class="max-w-6xl mx-auto">
-        <div class="neon-line mb-20"></div>
-        <div class="reveal-stagger grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div class="reveal-child">
-                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-white counter">5+</div>
-                <div class="text-sm text-slate-400">AI Models Orchestrated</div>
-            </div>
-            <div class="reveal-child" style="transition-delay:0.1s">
-                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-white counter">4x</div>
-                <div class="text-sm text-slate-400">GPU Parallel Rendering</div>
-            </div>
-            <div class="reveal-child" style="transition-delay:0.2s">
-                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-white counter">10+</div>
-                <div class="text-sm text-slate-400">Minutes Per Video</div>
-            </div>
-            <div class="reveal-child" style="transition-delay:0.3s">
-                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-neon counter">~0</div>
-                <div class="text-sm text-slate-400">Hours of Daily Routine</div>
-            </div>
-        </div>
+<!-- ===== METRICS ===== -->
+<section class="section-pad" style="background:var(--surface)">
+  <div class="container">
+    <hr class="glow-divider" style="margin-bottom:5rem">
+    <div class="metrics">
+      <div class="metric" data-reveal>
+        <div class="metric-value" style="color:var(--cyan)" data-count="5">0</div>
+        <div class="metric-label">AI Models Orchestrated</div>
+      </div>
+      <div class="metric" data-reveal data-reveal-delay="1">
+        <div class="metric-value" data-count="4">0</div>
+        <div class="metric-label">GPUs Rendering in Parallel</div>
+      </div>
+      <div class="metric" data-reveal data-reveal-delay="2">
+        <div class="metric-value" data-count="10">0</div>
+        <div class="metric-label">Minutes of Video Per Generation</div>
+      </div>
+      <div class="metric" data-reveal data-reveal-delay="3">
+        <div class="metric-value" style="color:var(--green)">~0h</div>
+        <div class="metric-label">Daily Routine Left</div>
+      </div>
     </div>
+  </div>
 </section>
 
-<!-- ==================== TECHNOLOGY ==================== -->
-<section id="technology" class="mesh-mid px-4 sm:px-6 lg:px-8 py-32">
-    <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-16">
-            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-nvidia">Infrastructure</span>
-            </div>
-            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4">Enterprise-Grade Stack</h2>
-            <p class="reveal text-lg text-slate-400 max-w-2xl mx-auto">Built on the same infrastructure that powers the world's most demanding AI workloads.</p>
-        </div>
-
-        <div class="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- NVIDIA -->
-            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center">
-                        <span class="font-heading font-bold text-nvidia text-lg">N</span>
-                    </div>
-                    <div>
-                        <h3 class="font-heading font-bold text-xl">NVIDIA Acceleration</h3>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-nvidia">Inception Partner</span>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="cpu" class="w-4 h-4 text-nvidia shrink-0"></i>
-                        <span>4x L40S 48GB GPUs &mdash; parallel rendering</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="zap" class="w-4 h-4 text-nvidia shrink-0"></i>
-                        <span>TensorRT-LLM for optimized inference</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="layers" class="w-4 h-4 text-nvidia shrink-0"></i>
-                        <span>NVIDIA NIM microservice containers</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AWS -->
-            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.1s">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
-                        <span class="font-heading font-bold text-orange-400 text-lg">A</span>
-                    </div>
-                    <div>
-                        <h3 class="font-heading font-bold text-xl">AWS Cloud</h3>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-orange-400">Compute Partner</span>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="cloud" class="w-4 h-4 text-orange-400 shrink-0"></i>
-                        <span>EC2 GPU instances with auto-scaling</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="bot" class="w-4 h-4 text-orange-400 shrink-0"></i>
-                        <span>Bedrock for foundation model access</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="database" class="w-4 h-4 text-orange-400 shrink-0"></i>
-                        <span>S3 + CloudFront for asset delivery</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Models -->
-            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.15s">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center">
-                        <i data-lucide="sparkles" class="w-6 h-6 text-neon"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-heading font-bold text-xl">AI Model Pipeline</h3>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Multi-Model</span>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="image" class="w-4 h-4 text-neon shrink-0"></i>
-                        <span>FLUX 2 Dev &mdash; reference image generation</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="pencil" class="w-4 h-4 text-neon shrink-0"></i>
-                        <span>Qwen Edit &mdash; scene compositing & editing</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="play" class="w-4 h-4 text-neon shrink-0"></i>
-                        <span>LTX-2.3 &mdash; image-to-video generation</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Orchestration -->
-            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.2s">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                        <i data-lucide="workflow" class="w-6 h-6 text-purple-400"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-heading font-bold text-xl">Smart Orchestration</h3>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-purple-400">ComfyUI Engine</span>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="git-branch" class="w-4 h-4 text-purple-400 shrink-0"></i>
-                        <span>Shot Graph &mdash; automated scene planning</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="clapperboard" class="w-4 h-4 text-purple-400 shrink-0"></i>
-                        <span>Director AI &mdash; autonomous production</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-400">
-                        <i data-lucide="gauge" class="w-4 h-4 text-purple-400 shrink-0"></i>
-                        <span>Work-stealing GPU scheduler</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ===== TECHNOLOGY ===== -->
+<section id="tech" class="section-pad">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-label" data-reveal><span style="color:var(--green)">Infrastructure</span></div>
+      <h2 class="section-title" data-reveal data-reveal-delay="1">Built for Scale. Built to Last.</h2>
+      <p class="section-desc" style="margin:0 auto" data-reveal data-reveal-delay="2">The same infrastructure stack that powers the world's most demanding AI workloads.</p>
     </div>
+    <div class="tech-grid">
+      <div class="tech-card" data-reveal>
+        <div class="tech-card-head">
+          <div class="tech-logo" style="background:rgba(118,185,0,.1);border:1px solid rgba(118,185,0,.2);color:var(--green)">N</div>
+          <div><h3>NVIDIA</h3><div class="tag" style="color:var(--green)">Inception Partner</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--green)"></span>4x L40S 48GB &mdash; parallel rendering cluster</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--green)"></span>TensorRT-LLM optimized inference</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--green)"></span>NVIDIA NIM microservice containers</div>
+        </div>
+      </div>
+      <div class="tech-card" data-reveal data-reveal-delay="1">
+        <div class="tech-card-head">
+          <div class="tech-logo" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--gold)">A</div>
+          <div><h3>Amazon Web Services</h3><div class="tag" style="color:var(--gold)">Compute Partner</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--gold)"></span>EC2 GPU instances with auto-scaling</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--gold)"></span>Bedrock for foundation model access</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--gold)"></span>S3 + CloudFront global asset delivery</div>
+        </div>
+      </div>
+      <div class="tech-card" data-reveal data-reveal-delay="1">
+        <div class="tech-card-head">
+          <div class="tech-logo" style="background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.2);color:var(--cyan)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3l1.9 5.8h6.1l-4.9 3.6 1.9 5.8L12 14.6l-4.9 3.6 1.9-5.8L4 8.8h6.1z"/></svg>
+          </div>
+          <div><h3>AI Model Pipeline</h3><div class="tag" style="color:var(--cyan)">Multi-Model</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--cyan)"></span>FLUX 2 Dev &mdash; image generation</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--cyan)"></span>Qwen Edit &mdash; scene compositing</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--cyan)"></span>LTX-2.3 &mdash; video synthesis</div>
+        </div>
+      </div>
+      <div class="tech-card" data-reveal data-reveal-delay="2">
+        <div class="tech-card-head">
+          <div class="tech-logo" style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);color:var(--violet)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3.54A2.5 2.5 0 0 1 9.5 2z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3.54A2.5 2.5 0 0 0 14.5 2z"/></svg>
+          </div>
+          <div><h3>Orchestration</h3><div class="tag" style="color:var(--violet)">ComfyUI Engine</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--violet)"></span>Shot Graph &mdash; automated scene planning</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--violet)"></span>Director AI &mdash; autonomous production</div>
+          <div class="tech-item"><span class="tech-item-dot" style="background:var(--violet)"></span>Work-stealing GPU scheduler</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ==================== ROADMAP ==================== -->
-<section id="roadmap" class="px-4 sm:px-6 lg:px-8 py-32">
-    <div class="max-w-4xl mx-auto">
-        <div class="text-center mb-20">
-            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Vision</span>
-            </div>
-            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold">Roadmap <span class="text-muted">2025 &mdash; 2027</span></h2>
-        </div>
-
-        <div class="relative pl-14 reveal-stagger">
-            <div class="roadmap-line"></div>
-
-            <!-- Q1 2025 -->
-            <div class="reveal-child relative mb-12">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-neon"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q1 2025 <span class="text-neon ml-2">COMPLETED</span></div>
-                <h4 class="font-heading font-bold text-lg mb-1">Research & Foundation</h4>
-                <p class="text-sm text-slate-400">Core architecture design. FLUX 2 integration. ComfyUI workflow engine. EC2 GPU infrastructure setup.</p>
-            </div>
-
-            <!-- Q2 2025 -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.05s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-neon"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q2 2025 <span class="text-neon ml-2">COMPLETED</span></div>
-                <h4 class="font-heading font-bold text-lg mb-1">Alpha &mdash; Core Pipeline</h4>
-                <p class="text-sm text-slate-400">Multi-model pipeline (FLUX + Qwen Edit + LTX). Universe system v1. Character reference generation. 4-GPU parallel rendering.</p>
-            </div>
-
-            <!-- Q3 2025 -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.1s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-neon"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q3 2025 <span class="text-neon ml-2">COMPLETED</span></div>
-                <h4 class="font-heading font-bold text-lg mb-1">Closed Beta &mdash; Universe & Consistency</h4>
-                <p class="text-sm text-slate-400">8-angle character turntables. Panoramic locations. Shot Graph pipeline. Director State Machine. Multi-character compositing.</p>
-            </div>
-
-            <!-- Q4 2025 -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.15s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-neon"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q4 2025 <span class="text-neon ml-2">COMPLETED</span></div>
-                <h4 class="font-heading font-bold text-lg mb-1">Open Beta &mdash; Autonomous Generation</h4>
-                <p class="text-sm text-slate-400">Two-pass Shot Planner. ViralScore v1. Competitor analytics. SEO automation. TTS integration with AWS Polly.</p>
-            </div>
-
-            <!-- Q1 2026 -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.2s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-nvidia/20 border-2 border-nvidia flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-nvidia"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q1 2026 <span class="text-nvidia ml-2">COMPLETED</span></div>
-                <h4 class="font-heading font-bold text-lg mb-1">v1.0 &mdash; Full Platform Launch</h4>
-                <p class="text-sm text-slate-400">Production-ready video pipeline. 10+ minute video generation. Smart publishing. YouTube OAuth integration. Channel management.</p>
-            </div>
-
-            <!-- Q2 2026 (current) -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.25s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-hot/20 border-2 border-hot flex items-center justify-center pulse-ring">
-                    <div class="w-2 h-2 rounded-full bg-hot"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q2 2026 <span class="text-hot ml-2">IN PROGRESS</span></div>
-                <h4 class="font-heading font-bold text-lg mb-1">ViralScore 2.0 &mdash; Predictive Analytics</h4>
-                <p class="text-sm text-slate-400">AI-powered content prediction engine. Real-time trend detection via NVIDIA NIM. Niche discovery automation. Multi-channel optimization.</p>
-            </div>
-
-            <!-- Q3 2026 -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.3s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q3 2026</div>
-                <h4 class="font-heading font-bold text-lg mb-1">Enterprise API & Cloud Rendering</h4>
-                <p class="text-sm text-slate-400">Public API for enterprise clients. Cloud rendering infrastructure. Multi-tenant GPU management. SLA guarantees.</p>
-            </div>
-
-            <!-- Q4 2026 -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.35s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q4 2026</div>
-                <h4 class="font-heading font-bold text-lg mb-1">Studio Pro &mdash; Professional Suite</h4>
-                <p class="text-sm text-slate-400">Advanced editing timeline. Real-time collaboration. Custom model fine-tuning. Voice cloning integration. Multi-language output.</p>
-            </div>
-
-            <!-- Q1-Q2 2027 -->
-            <div class="reveal-child relative mb-12" style="transition-delay:0.4s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q1&ndash;Q2 2027</div>
-                <h4 class="font-heading font-bold text-lg mb-1">Global Scale &mdash; Multi-Region Deployment</h4>
-                <p class="text-sm text-slate-400">US, EU, APAC GPU clusters. Edge rendering via NVIDIA CloudXR. Sub-minute generation latency. Creator marketplace.</p>
-            </div>
-
-            <!-- Q3-Q4 2027 -->
-            <div class="reveal-child relative" style="transition-delay:0.45s">
-                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
-                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
-                </div>
-                <div class="text-xs font-bold text-muted mb-1">Q3&ndash;Q4 2027</div>
-                <h4 class="font-heading font-bold text-lg mb-1">Ecosystem &mdash; Platform & Integrations</h4>
-                <p class="text-sm text-slate-400">Plugin marketplace. Third-party model integrations. Creator tools SDK. TikTok and Instagram Reels pipeline. Brand partnership network.</p>
-            </div>
-        </div>
+<!-- ===== ROADMAP ===== -->
+<section id="roadmap" class="section-pad" style="background:var(--surface)">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-label" data-reveal><span style="color:var(--violet)">Vision</span></div>
+      <h2 class="section-title" data-reveal data-reveal-delay="1">Roadmap <span style="color:var(--muted)">2025 &mdash; 2027</span></h2>
     </div>
+    <div class="roadmap" style="max-width:40rem;margin:4rem auto 0">
+      <div class="roadmap-line"></div>
+
+      <div class="rm-item" data-reveal>
+        <div class="rm-dot" style="background:rgba(0,240,255,.15);border:2px solid var(--cyan)"><div class="rm-dot-inner" style="background:var(--cyan)"></div></div>
+        <div class="rm-date">Q1 2025 <span class="rm-status" style="color:var(--cyan)">Done</span></div>
+        <h4>Research & Foundation</h4>
+        <p>Core architecture. FLUX 2 integration. ComfyUI workflow engine. EC2 GPU infrastructure.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="1">
+        <div class="rm-dot" style="background:rgba(0,240,255,.15);border:2px solid var(--cyan)"><div class="rm-dot-inner" style="background:var(--cyan)"></div></div>
+        <div class="rm-date">Q2 2025 <span class="rm-status" style="color:var(--cyan)">Done</span></div>
+        <h4>Alpha &mdash; Core Pipeline</h4>
+        <p>Multi-model pipeline. Universe system v1. Character references. 4-GPU parallel rendering.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="1">
+        <div class="rm-dot" style="background:rgba(0,240,255,.15);border:2px solid var(--cyan)"><div class="rm-dot-inner" style="background:var(--cyan)"></div></div>
+        <div class="rm-date">Q3&ndash;Q4 2025 <span class="rm-status" style="color:var(--cyan)">Done</span></div>
+        <h4>Beta &mdash; Universe & Director</h4>
+        <p>8-angle turntables. Shot Graph pipeline. Director State Machine. Multi-character compositing. ViralScore v1.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="2">
+        <div class="rm-dot" style="background:rgba(118,185,0,.15);border:2px solid var(--green)"><div class="rm-dot-inner" style="background:var(--green)"></div></div>
+        <div class="rm-date">Q1 2026 <span class="rm-status" style="color:var(--green)">Done</span></div>
+        <h4>v1.0 &mdash; Platform Launch</h4>
+        <p>Production-ready 10+ min video generation. Smart publishing. YouTube OAuth. Channel management.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="2">
+        <div class="rm-dot" style="background:rgba(244,63,94,.15);border:2px solid var(--rose);box-shadow:0 0 12px rgba(244,63,94,.3)"><div class="rm-dot-inner" style="background:var(--rose)"></div></div>
+        <div class="rm-date">Q2 2026 <span class="rm-status" style="color:var(--rose)">In Progress</span></div>
+        <h4>ViralScore 2.0 &mdash; Predictive Engine</h4>
+        <p>AI content prediction. Real-time trend detection. Niche discovery automation. Multi-channel optimization.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="3">
+        <div class="rm-dot" style="background:rgba(255,255,255,.05);border:2px solid var(--dim)"><div class="rm-dot-inner" style="background:var(--dim)"></div></div>
+        <div class="rm-date">Q3 2026</div>
+        <h4>Enterprise API & Cloud Rendering</h4>
+        <p>Public REST API. Cloud rendering infrastructure. Multi-tenant GPU management. SLA guarantees.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="3">
+        <div class="rm-dot" style="background:rgba(255,255,255,.05);border:2px solid var(--dim)"><div class="rm-dot-inner" style="background:var(--dim)"></div></div>
+        <div class="rm-date">Q4 2026</div>
+        <h4>Studio Pro &mdash; Professional Suite</h4>
+        <p>Advanced editing timeline. Real-time collab. Custom model fine-tuning. Voice cloning. Multi-language.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="4">
+        <div class="rm-dot" style="background:rgba(255,255,255,.05);border:2px solid var(--dim)"><div class="rm-dot-inner" style="background:var(--dim)"></div></div>
+        <div class="rm-date">H1 2027</div>
+        <h4>Global Scale &mdash; Multi-Region</h4>
+        <p>US, EU, APAC GPU clusters. Edge rendering. Sub-minute generation. Creator marketplace launch.</p>
+      </div>
+      <div class="rm-item" data-reveal data-reveal-delay="4">
+        <div class="rm-dot" style="background:rgba(255,255,255,.05);border:2px solid var(--dim)"><div class="rm-dot-inner" style="background:var(--dim)"></div></div>
+        <div class="rm-date">H2 2027</div>
+        <h4>Ecosystem &mdash; Platform Economy</h4>
+        <p>Plugin marketplace. Third-party models. Creator SDK. TikTok & Reels pipeline. Brand partnership network.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ==================== CTA ==================== -->
-<section class="mesh-cta px-4 sm:px-6 lg:px-8 py-32">
-    <div class="max-w-3xl mx-auto text-center">
-        <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-6">
-            Ready to Stop<br>Working <span class="glow-text">in</span> Your Channel<br>and Start Working <span class="glow-text">on</span> It?
-        </h2>
-        <p class="reveal text-lg text-slate-400 mb-10 max-w-xl mx-auto">
-            We're onboarding a limited number of creators for our pilot program. Apply for early access and be among the first to automate your entire workflow.
-        </p>
-        <div class="reveal flex flex-col sm:flex-row justify-center gap-4">
-            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access Application" class="cta-btn px-10 py-4 rounded-xl text-base">
-                Apply for Early Access
-            </a>
-            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Partnership Inquiry" class="btn-outline px-10 py-4 rounded-xl text-base">
-                Partnership Inquiries
-            </a>
-        </div>
+<!-- ===== CTA ===== -->
+<section class="cta-section section-pad">
+  <div class="container" style="text-align:center">
+    <h2 data-reveal>Stop Working <em style="color:var(--muted);font-style:normal">in</em> Your Channel.<br>Start Working <span class="gradient-text">on</span> It.</h2>
+    <p class="section-desc" style="margin:0 auto 2.5rem" data-reveal data-reveal-delay="1">Limited pilot spots available. Apply now and be among the first to automate your entire content pipeline.</p>
+    <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap" data-reveal data-reveal-delay="2">
+      <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access" class="btn-primary">Apply for Early Access</a>
+      <a href="mailto:davyd.kurochka@visionguardai.online?subject=Partnership" class="btn-ghost">Partnership Inquiries</a>
     </div>
+  </div>
 </section>
 
-<!-- ==================== FOOTER ==================== -->
-<footer class="px-4 sm:px-6 lg:px-8 py-12 border-t border-white/5">
-    <div class="max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-4">
-                <span class="font-heading font-bold text-lg tracking-tight">VISIONGUARD<span class="text-neon">AI</span></span>
-                <div class="flex items-center gap-2 px-3 py-1 rounded-lg border border-nvidia/30 bg-nvidia/5">
-                    <span class="w-1.5 h-1.5 bg-nvidia rounded-full"></span>
-                    <span class="text-[9px] font-bold tracking-widest text-nvidia uppercase">NVIDIA Inception</span>
-                </div>
-            </div>
-            <div class="flex items-center gap-6 text-xs text-muted">
-                <a href="mailto:davyd.kurochka@visionguardai.online" class="hover:text-white transition-colors duration-200 cursor-pointer">Contact</a>
-                <span class="text-white/10">|</span>
-                <span>Kyiv &bull; San Francisco &bull; London</span>
-            </div>
-            <div class="text-[10px] text-muted/60 tracking-widest uppercase">
-                &copy; 2025&ndash;2026 VisionGuard AI Technologies Inc.
-            </div>
-        </div>
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <span class="logo" style="font-size:.9rem">CONTENT<span>OS</span></span>
+      <span style="color:rgba(255,255,255,.1)">|</span>
+      <span style="font-size:.65rem;color:var(--green);font-weight:700;letter-spacing:.1em">NVIDIA INCEPTION</span>
     </div>
+    <div>Kyiv &bull; San Francisco &bull; London</div>
+    <div>&copy; 2025&ndash;2026 VisionGuard AI Technologies Inc.</div>
+  </div>
 </footer>
 
-<!-- ==================== SCRIPTS ==================== -->
+<!-- ===== SCRIPTS ===== -->
 <script>
-    // Initialize Lucide icons
-    lucide.createIcons();
+// === AURORA CANVAS ===
+(function(){
+  const c=document.getElementById('aurora-canvas'),ctx=c.getContext('2d');
+  let w,h,t=0,mouse={x:.5,y:.5};
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  document.addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
 
-    // Nav scroll effect
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 40);
-    }, { passive: true });
+  const orbs=[
+    {x:.2,y:.3,r:300,color:[0,240,255],speed:.0003,phase:0},
+    {x:.7,y:.2,r:250,color:[124,58,237],speed:.0004,phase:2},
+    {x:.5,y:.7,r:280,color:[244,63,94],speed:.00025,phase:4},
+    {x:.8,y:.6,r:200,color:[118,185,0],speed:.00035,phase:1},
+  ];
 
-    // Intersection Observer for reveal animations
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    t++;
+    for(const o of orbs){
+      const ox=o.x+Math.sin(t*o.speed+o.phase)*.15+(mouse.x-.5)*.08;
+      const oy=o.y+Math.cos(t*o.speed*.7+o.phase)*.1+(mouse.y-.5)*.06;
+      const g=ctx.createRadialGradient(ox*w,oy*h,0,ox*w,oy*h,o.r*(w/1440));
+      g.addColorStop(0,`rgba(${o.color.join(',')},0.08)`);
+      g.addColorStop(.5,`rgba(${o.color.join(',')},0.03)`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;
+      ctx.fillRect(0,0,w,h);
+    }
+    requestAnimationFrame(draw);
+  }
+  // Check reduced motion
+  if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches) draw();
+  else{
+    // Static fallback
+    for(const o of orbs){
+      const g=ctx.createRadialGradient(o.x*w,o.y*h,0,o.x*w,o.y*h,o.r);
+      g.addColorStop(0,`rgba(${o.color.join(',')},0.06)`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    }
+  }
+})();
 
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
+// === NAV SCROLL ===
+const nav=document.getElementById('nav');
+const badge=document.getElementById('inception-badge');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY>50;
+  nav.classList.toggle('scrolled',s);
+  badge.style.display=s?'inline-flex':'none';
+},{passive:true});
 
-    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
-        revealObserver.observe(el);
-    });
+// === REVEAL ON SCROLL ===
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');ro.unobserve(e.target)}});
+},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('[data-reveal]').forEach(el=>ro.observe(el));
 
-    // Staggered children animation
-    const staggerObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const children = entry.target.querySelectorAll('.reveal-child');
-                children.forEach((child, i) => {
-                    child.style.transitionDelay = child.style.transitionDelay || `${i * 0.1}s`;
-                });
-                entry.target.classList.add('visible');
-                staggerObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.reveal-stagger').forEach(el => {
-        staggerObserver.observe(el);
-    });
+// === ANIMATED COUNTERS ===
+const co=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;
+    const target=parseInt(el.dataset.count);
+    if(!target)return;
+    let current=0;
+    const step=Math.ceil(target/40);
+    const interval=setInterval(()=>{
+      current+=step;
+      if(current>=target){current=target;clearInterval(interval)}
+      el.textContent=current+'+';
+    },40);
+    co.unobserve(el);
+  });
+},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
 </script>
 </body>
 </html>
