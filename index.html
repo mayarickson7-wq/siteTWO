@@ -3,598 +3,803 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContentOS — The Operating System for AI Content Creators</title>
-<meta name="description" content="ContentOS eliminates the daily grind for YouTube creators. AI-powered video generation, automated analytics, zero routine.">
-<meta name="theme-color" content="#050505">
+<title>ContentOS — The AI Operating System for YouTube Creators</title>
+<meta name="description" content="ContentOS generates Pixar-quality AI videos, predicts virality, and manages your channels autonomously. NVIDIA Inception partner.">
+<meta name="theme-color" content="#050510">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#050505;--surface:#0a0a0f;--card:#0d0d14;
-  --cyan:#00f0ff;--violet:#7c3aed;--green:#76b900;--rose:#f43f5e;--gold:#f59e0b;
-  --text:#e2e8f0;--muted:#64748b;--dim:#334155;
+  --bg:#050510;
+  --cyan:#00FFFF;--purple:#7B61FF;--magenta:#FF00FF;--green:#76b900;
+  --rose:#f43f5e;--gold:#f59e0b;
+  --text:#E0E0FF;--text-muted:#8888AA;--text-dim:#555577;
+  --glass:rgba(255,255,255,.03);--glass-border:rgba(255,255,255,.06);
   --font-h:'Space Grotesk',system-ui,sans-serif;
-  --font-b:'Inter',system-ui,sans-serif;
-  --ease:cubic-bezier(.25,.46,.45,.94);
-  --ease-out:cubic-bezier(.16,1,.3,1);
+  --font-b:'DM Sans',system-ui,sans-serif;
 }
-html{background:var(--bg)}
-body{font-family:var(--font-b);color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4,h5,h6{font-family:var(--font-h)}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:var(--font-b);color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-h);line-height:1.1}
 a{color:inherit;text-decoration:none}
+button{font-family:inherit}
 
-/* Grain */
+/* ===== GRAIN OVERLAY ===== */
 body::after{
-  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size:256px;
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* === NAV === */
-.nav{position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:100;width:min(calc(100% - 2rem),72rem);padding:.65rem 1.25rem;background:rgba(5,5,5,.5);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.05);border-radius:1rem;transition:all .4s}
-.nav.scrolled{background:rgba(5,5,5,.85);border-color:rgba(255,255,255,.08)}
+/* ===== MOUSE SPOTLIGHT ===== */
+#spotlight{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 1s}
+#spotlight.active{opacity:1}
+
+/* ===== MORPHING GRADIENT BLOBS ===== */
+.blobs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.12;will-change:transform}
+.blob-1{width:60vw;height:60vw;max-width:900px;max-height:900px;top:-15%;left:-10%;background:radial-gradient(circle,var(--cyan),transparent 70%);animation:blobMove1 20s ease-in-out infinite}
+.blob-2{width:50vw;height:50vw;max-width:750px;max-height:750px;top:30%;right:-15%;background:radial-gradient(circle,var(--purple),transparent 70%);animation:blobMove2 25s ease-in-out infinite}
+.blob-3{width:45vw;height:45vw;max-width:650px;max-height:650px;bottom:-10%;left:20%;background:radial-gradient(circle,var(--magenta),transparent 70%);animation:blobMove3 22s ease-in-out infinite}
+.blob-4{width:35vw;height:35vw;max-width:500px;max-height:500px;top:60%;left:50%;background:radial-gradient(circle,var(--green),transparent 70%);animation:blobMove4 28s ease-in-out infinite;opacity:.06}
+@keyframes blobMove1{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(8vw,5vh) scale(1.1)}50%{transform:translate(3vw,10vh) scale(.95)}75%{transform:translate(-5vw,3vh) scale(1.05)}}
+@keyframes blobMove2{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(-6vw,8vh) scale(1.08)}50%{transform:translate(-10vw,3vh) scale(.92)}75%{transform:translate(-3vw,-5vh) scale(1.12)}}
+@keyframes blobMove3{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(5vw,-6vh) scale(1.05)}50%{transform:translate(10vw,-3vh) scale(1.1)}75%{transform:translate(3vw,4vh) scale(.95)}}
+@keyframes blobMove4{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-8vw,-5vh) scale(1.15)}66%{transform:translate(5vw,8vh) scale(.9)}}
+
+/* ===== FLOATING NAV (glass) ===== */
+.nav{position:fixed;top:1.25rem;left:50%;transform:translateX(-50%);z-index:1000;width:min(calc(100% - 2rem),72rem);padding:.6rem 1.5rem;background:rgba(5,5,16,.4);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.06);border-radius:1rem;transition:all .5s cubic-bezier(.4,0,.2,1)}
+.nav.scrolled{background:rgba(5,5,16,.75);border-color:rgba(255,255,255,.1);box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:var(--font-h);font-weight:700;font-size:1.05rem;letter-spacing:-.02em}
-.logo span{color:var(--cyan)}
-.nav-links{display:flex;gap:2rem;font-size:.8rem;color:var(--muted)}
-.nav-links a{transition:color .2s;cursor:pointer}.nav-links a:hover{color:#fff}
-.nav-cta{padding:.45rem 1.1rem;border-radius:.65rem;font-size:.78rem;font-weight:600;background:linear-gradient(135deg,var(--cyan),#0080ee);color:#000;transition:all .3s;cursor:pointer;border:none}
-.nav-cta:hover{box-shadow:0 0 24px rgba(0,240,255,.3);transform:translateY(-1px)}
-.inception-tag{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .55rem;border-radius:.4rem;border:1px solid rgba(118,185,0,.3);font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green)}
-.inception-tag .d{width:4px;height:4px;border-radius:50%;background:var(--green);animation:p 2s infinite}
-@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.logo{font-family:var(--font-h);font-weight:700;font-size:1.1rem;letter-spacing:-.025em;cursor:pointer}
+.logo span{background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:2rem;font-size:.82rem;color:var(--text-muted)}
+.nav-links a{transition:color .25s;cursor:pointer;position:relative}
+.nav-links a:hover{color:#fff}
+.nav-links a::after{content:'';position:absolute;bottom:-.35rem;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .3s}
+.nav-links a:hover::after{width:100%}
+.nav-cta{padding:.5rem 1.25rem;border-radius:.75rem;font-size:.8rem;font-weight:600;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;transition:all .35s;cursor:pointer;border:none;position:relative;overflow:hidden}
+.nav-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--purple),var(--magenta));opacity:0;transition:opacity .35s}.nav-cta:hover::before{opacity:1}
+.nav-cta span{position:relative;z-index:1}
+.nav-cta:hover{box-shadow:0 0 30px rgba(0,255,255,.25);transform:translateY(-1px)}
+.nvidia-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .65rem;border-radius:.45rem;border:1px solid rgba(118,185,0,.25);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);background:rgba(118,185,0,.06)}
+.nvidia-badge .pulse{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
 
-/* === PARTICLE CANVAS (behind hero + sticky visual) === */
-#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-/* === HERO with sticky zoom-out === */
-.hero-wrap{position:relative;height:250vh;z-index:2}
-.hero-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.hero-content{text-align:center;padding:0 1.5rem;transition:none;will-change:transform,opacity}
-.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.45rem 1.1rem;border-radius:2rem;background:rgba(0,240,255,.04);border:1px solid rgba(0,240,255,.12);font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,240,255,.7);margin-bottom:2rem}
-.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:p 2s infinite}
-.hero-content h1{font-size:clamp(2.8rem,7.5vw,6rem);font-weight:700;line-height:1;letter-spacing:-.045em;margin-bottom:1.75rem}
-.gradient-text{background:linear-gradient(135deg,var(--cyan),var(--violet),var(--rose),var(--cyan));background-size:300% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gf 6s ease infinite}
-@keyframes gf{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
-.hero-sub{font-size:clamp(1rem,2.2vw,1.35rem);color:var(--muted);max-width:38rem;margin:0 auto 2.5rem;line-height:1.7}
+/* ===== HERO ===== */
+.hero{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:8rem 1.5rem 6rem;overflow:hidden}
+.hero-content{text-align:center;max-width:56rem;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;padding:.5rem 1.25rem;border-radius:3rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);backdrop-filter:blur(10px);font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2.5rem}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 2s infinite}
+.hero h1{font-size:clamp(3rem,8vw,6.5rem);font-weight:700;letter-spacing:-.05em;margin-bottom:2rem;position:relative}
+/* Chromatic aberration title */
+.chrome-text{position:relative;display:inline-block}
+.chrome-text::before,.chrome-text::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;-webkit-background-clip:text;background-clip:text}
+.chrome-text::before{-webkit-text-fill-color:rgba(0,255,255,.35);left:3px;top:2px;animation:chromaR 4s ease-in-out infinite}
+.chrome-text::after{-webkit-text-fill-color:rgba(255,0,255,.25);left:-3px;top:-2px;animation:chromaL 4s ease-in-out infinite}
+@keyframes chromaR{0%,100%{transform:translate(0)}25%{transform:translate(3px,1px)}75%{transform:translate(-2px,-1px)}}
+@keyframes chromaL{0%,100%{transform:translate(0)}25%{transform:translate(-3px,-1px)}75%{transform:translate(2px,1px)}}
+.gradient-text{background:linear-gradient(135deg,var(--cyan),var(--purple),var(--magenta),var(--cyan));background-size:300% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradientShift 8s ease infinite}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero-sub{font-size:clamp(1.05rem,2.2vw,1.35rem);color:var(--text-muted);max-width:36rem;margin:0 auto 3rem;line-height:1.75}
 .hero-sub strong{color:#fff;font-weight:600}
-.hero-btns{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
-.btn-p{padding:.8rem 1.75rem;border-radius:.8rem;font-size:.9rem;font-weight:600;background:linear-gradient(135deg,var(--cyan),#0080ee);color:#000;border:none;cursor:pointer;transition:all .35s;position:relative;overflow:hidden}
-.btn-p:hover{box-shadow:0 0 36px rgba(0,240,255,.35);transform:translateY(-2px)}
-.btn-g{padding:.8rem 1.75rem;border-radius:.8rem;font-size:.9rem;font-weight:600;border:1px solid rgba(255,255,255,.1);color:#fff;cursor:pointer;background:0;transition:all .35s}
-.btn-g:hover{border-color:rgba(0,240,255,.3);background:rgba(0,240,255,.03)}
+.hero-actions{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
 
-/* === MARQUEE === */
-.marquee{position:relative;z-index:3;padding:2rem 0;overflow:hidden;border-top:1px solid rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.03)}
-.marquee-track{display:flex;gap:3rem;width:max-content;animation:slide 25s linear infinite}
+/* Buttons */
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:.85rem;font-size:.95rem;font-weight:600;border:none;cursor:pointer;position:relative;overflow:hidden;transition:all .4s cubic-bezier(.4,0,.2,1);background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000}
+.btn-primary::before{content:'';position:absolute;inset:-2px;border-radius:inherit;background:linear-gradient(135deg,var(--cyan),var(--purple),var(--magenta));z-index:-1;filter:blur(15px);opacity:0;transition:opacity .4s}.btn-primary:hover::before{opacity:.6}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,255,255,.3)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:.85rem;font-size:.95rem;font-weight:600;border:1px solid var(--glass-border);color:var(--text);cursor:pointer;background:var(--glass);backdrop-filter:blur(10px);transition:all .4s}
+.btn-ghost:hover{border-color:rgba(0,255,255,.2);background:rgba(0,255,255,.04);transform:translateY(-2px)}
+
+/* Floating orbs around hero */
+.hero-orbs{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;backdrop-filter:blur(2px);border:1px solid rgba(255,255,255,.05)}
+.orb-1{width:120px;height:120px;top:8%;left:8%;background:radial-gradient(circle,rgba(0,255,255,.08),transparent);animation:float1 12s ease-in-out infinite}
+.orb-2{width:80px;height:80px;top:15%;right:12%;background:radial-gradient(circle,rgba(123,97,255,.1),transparent);animation:float2 15s ease-in-out infinite}
+.orb-3{width:60px;height:60px;bottom:20%;left:15%;background:radial-gradient(circle,rgba(255,0,255,.08),transparent);animation:float3 10s ease-in-out infinite}
+.orb-4{width:100px;height:100px;bottom:15%;right:8%;background:radial-gradient(circle,rgba(0,255,255,.06),transparent);animation:float1 18s ease-in-out infinite reverse}
+.orb-5{width:40px;height:40px;top:40%;left:5%;background:radial-gradient(circle,rgba(118,185,0,.1),transparent);animation:float2 9s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,-30px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,25px)}}
+@keyframes float3{0%,100%{transform:translate(0,0)}50%{transform:translate(15px,20px)}}
+
+/* ===== MARQUEE ===== */
+.marquee-wrap{position:relative;z-index:2;padding:1.75rem 0;overflow:hidden;border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04)}
+.marquee-track{display:flex;gap:3rem;width:max-content;animation:marquee 30s linear infinite}
 .marquee-track:hover{animation-play-state:paused}
-.marquee-item{font-family:var(--font-h);font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:.5rem;cursor:default;transition:color .2s}
+.marquee-item{font-family:var(--font-h);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;display:flex;align-items:center;gap:.5rem;cursor:default;transition:color .3s}
 .marquee-item:hover{color:var(--cyan)}
-.marquee-dot{width:3px;height:3px;border-radius:50%;background:var(--dim)}
-@keyframes slide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-sep{width:4px;height:4px;border-radius:50%;background:var(--text-dim);flex-shrink:0}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/* === SECTIONS === */
-.s{position:relative;z-index:3;padding:7rem 1.5rem}
-.c{max-width:72rem;margin:0 auto}
-.s-label{display:inline-flex;padding:.3rem .85rem;border-radius:2rem;font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);margin-bottom:1.25rem}
-.s-title{font-size:clamp(1.8rem,4.5vw,3.2rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:1rem}
-.s-desc{font-size:1.05rem;color:var(--muted);max-width:34rem;line-height:1.7}
+/* ===== SECTIONS ===== */
+.section{position:relative;z-index:2;padding:8rem 1.5rem}
+.container{max-width:72rem;margin:0 auto}
+.section-label{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem 1rem;border-radius:2rem;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(10px);margin-bottom:1.5rem}
+.section-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:700;letter-spacing:-.035em;margin-bottom:1rem}
+.section-desc{font-size:1.1rem;color:var(--text-muted);max-width:36rem;line-height:1.75}
 
-/* REVEAL */
-[data-r]{opacity:0;transform:translateY(32px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
-[data-r].v{opacity:1;transform:none}
-[data-d="1"]{transition-delay:.08s}[data-d="2"]{transition-delay:.16s}[data-d="3"]{transition-delay:.24s}[data-d="4"]{transition-delay:.32s}[data-d="5"]{transition-delay:.4s}
+/* ===== REVEAL ANIMATIONS ===== */
+[data-reveal]{opacity:0;transform:translateY(40px) scale(.97);transition:all .8s cubic-bezier(.16,1,.3,1)}
+[data-reveal].visible{opacity:1;transform:translateY(0) scale(1)}
+[data-reveal="left"]{transform:translateX(-60px) scale(.97)}
+[data-reveal="left"].visible{transform:translateX(0) scale(1)}
+[data-reveal="right"]{transform:translateX(60px) scale(.97)}
+[data-reveal="right"].visible{transform:translateX(0) scale(1)}
+[data-reveal="scale"]{transform:scale(.85);opacity:0}
+[data-reveal="scale"].visible{transform:scale(1);opacity:1}
+[data-delay="1"]{transition-delay:.1s}[data-delay="2"]{transition-delay:.2s}[data-delay="3"]{transition-delay:.3s}[data-delay="4"]{transition-delay:.4s}[data-delay="5"]{transition-delay:.5s}
 
-/* GLOW LINE */
-.glow{height:1px;border:none;background:linear-gradient(90deg,transparent,rgba(0,240,255,.2) 30%,rgba(124,58,237,.2) 70%,transparent);max-width:36rem;margin:0 auto}
+/* ===== GLOW DIVIDER ===== */
+.glow-line{height:1px;border:none;background:linear-gradient(90deg,transparent,rgba(0,255,255,.15) 20%,rgba(123,97,255,.2) 50%,rgba(255,0,255,.15) 80%,transparent);max-width:40rem;margin:0 auto}
 
-/* === HORIZONTAL SCROLL FEATURES === */
-.hs-wrap{position:relative;z-index:3}
+/* ===== GLASS CARD (reusable) ===== */
+.glass-card{position:relative;padding:2.5rem;border-radius:1.25rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);cursor:pointer;transition:all .5s cubic-bezier(.4,0,.2,1);overflow:hidden}
+.glass-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:conic-gradient(from var(--card-angle,0deg),transparent 0%,rgba(0,255,255,.08) 10%,transparent 20%,rgba(123,97,255,.08) 40%,transparent 50%,rgba(255,0,255,.06) 70%,transparent 80%);opacity:0;transition:opacity .5s}.glass-card:hover::before{opacity:1}
+.glass-card:hover{border-color:rgba(0,255,255,.12);transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.3),0 0 40px rgba(0,255,255,.05)}
+.glass-card h3{font-size:1.2rem;font-weight:700;margin-bottom:.5rem;letter-spacing:-.01em}
+.glass-card p{font-size:.88rem;color:var(--text-muted);line-height:1.7}
+
+/* Card icon */
+.card-icon{width:3rem;height:3rem;border-radius:.85rem;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);transition:all .4s}
+.glass-card:hover .card-icon{border-color:rgba(0,255,255,.15);box-shadow:0 0 20px rgba(0,255,255,.1)}
+
+/* ===== PAIN SECTION ===== */
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+
+/* ===== HORIZONTAL SCROLL FEATURES ===== */
+.features-header{padding:8rem 1.5rem 3rem;position:relative;z-index:2}
+.hs-wrap{position:relative;z-index:2}
 .hs-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
-.hs-track{display:flex;gap:1.5rem;will-change:transform;padding:0 4rem}
-.f-card{flex:0 0 22rem;min-height:20rem;padding:2.25rem;border-radius:1.5rem;background:var(--card);border:1px solid rgba(255,255,255,.04);cursor:pointer;transition:all .5s var(--ease);position:relative;overflow:hidden}
-.f-card:hover{border-color:rgba(0,240,255,.12);transform:translateY(-4px)}
-.f-card::after{content:'';position:absolute;inset:-1px;border-radius:inherit;z-index:-1;background:conic-gradient(from 0deg,var(--cyan),var(--violet),var(--rose),var(--cyan));opacity:0;transition:opacity .5s}.f-card:hover::after{opacity:.12}
-.f-label{font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.9rem;display:flex;align-items:center;gap:.45rem}
-.f-card h3{font-size:1.3rem;font-weight:700;margin-bottom:.65rem;letter-spacing:-.015em}
-.f-card p{font-size:.85rem;color:var(--muted);line-height:1.65}
-.f-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1.25rem}
-.f-tag{font-size:.6rem;font-weight:600;padding:.25rem .6rem;border-radius:.4rem;background:rgba(255,255,255,.04);color:var(--muted)}
-/* Title for hs section (positioned at start) */
-.hs-header{padding:7rem 1.5rem 3rem;position:relative;z-index:3}
+.hs-track{display:flex;gap:1.75rem;will-change:transform;padding:0 4rem}
+.feature-card{flex:0 0 24rem;min-height:22rem;position:relative;padding:2.5rem;border-radius:1.5rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);backdrop-filter:blur(16px) saturate(150%);overflow:hidden;cursor:pointer;transition:all .5s cubic-bezier(.4,0,.2,1)}
+.feature-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:conic-gradient(from var(--card-angle,0deg),transparent,rgba(0,255,255,.1) 10%,transparent 20%,rgba(123,97,255,.08) 45%,transparent 55%,rgba(255,0,255,.06) 80%,transparent);opacity:0;transition:opacity .5s}.feature-card:hover::before{opacity:1}
+.feature-card:hover{border-color:rgba(0,255,255,.15);transform:translateY(-8px);box-shadow:0 24px 64px rgba(0,0,0,.4),0 0 50px rgba(0,255,255,.06)}
+.feature-card .f-label{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.feature-card h3{font-size:1.35rem;font-weight:700;margin-bottom:.75rem;letter-spacing:-.02em}
+.feature-card p{font-size:.88rem;color:var(--text-muted);line-height:1.7}
+.f-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.5rem}
+.f-tag{font-size:.6rem;font-weight:600;padding:.3rem .7rem;border-radius:.4rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.04);color:var(--text-muted)}
 
-/* === PAIN CARDS === */
-.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
-.pain-card{padding:2.25rem;border-radius:1.25rem;background:var(--card);border:1px solid rgba(255,255,255,.04);transition:all .5s;cursor:pointer}
-.pain-card:hover{border-color:rgba(255,255,255,.08);transform:translateY(-3px)}
-.pain-icon{width:2.75rem;height:2.75rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem}
-.pain-card h3{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
-.pain-card p{font-size:.85rem;color:var(--muted);line-height:1.6}
+/* ===== HOW IT WORKS (Steps) ===== */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:4rem}
+.step-card{position:relative;padding:2rem;cursor:pointer;transition:all .4s}
+.step-card:hover{transform:translateY(-4px)}
+.step-num{font-family:var(--font-h);font-size:4rem;font-weight:700;line-height:1;margin-bottom:1rem;background:linear-gradient(180deg,rgba(0,255,255,.15),transparent);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transition:all .4s}
+.step-card:hover .step-num{background:linear-gradient(180deg,rgba(0,255,255,.35),rgba(123,97,255,.1));-webkit-background-clip:text;background-clip:text}
+.step-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+.step-card p{font-size:.85rem;color:var(--text-muted);line-height:1.65}
+/* Connector line between steps */
+.step-card::after{content:'';position:absolute;top:2.5rem;right:-1rem;width:2rem;height:1px;background:linear-gradient(90deg,rgba(0,255,255,.15),transparent)}
+.step-card:last-child::after{display:none}
 
-/* === STEPS === */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem}
-.step{padding:1.5rem;cursor:pointer}
-.step-n{font-family:var(--font-h);font-size:3.5rem;font-weight:700;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:.75rem}
-.step h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
-.step p{font-size:.8rem;color:var(--muted);line-height:1.6}
+/* ===== METRICS ===== */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;margin-top:4rem}
+.metric-card{text-align:center;padding:2rem 1rem}
+.metric-value{font-family:var(--font-h);font-size:clamp(2.5rem,5vw,3.5rem);font-weight:700;letter-spacing:-.03em;margin-bottom:.4rem}
+.metric-label{font-size:.82rem;color:var(--text-muted)}
+.metric-bar{width:60%;height:2px;margin:1.25rem auto 0;border-radius:2px;background:rgba(255,255,255,.04);overflow:hidden}
+.metric-bar-fill{height:100%;border-radius:2px;width:0;transition:width 1.8s cubic-bezier(.16,1,.3,1)}
 
-/* === METRICS with animated bar === */
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3.5rem}
-.metric{text-align:center}
-.metric-v{font-family:var(--font-h);font-size:clamp(2.2rem,4.5vw,3.2rem);font-weight:700;letter-spacing:-.03em;margin-bottom:.2rem}
-.metric-l{font-size:.8rem;color:var(--muted)}
-.metric-bar{width:60%;height:2px;margin:1rem auto 0;border-radius:1px;background:rgba(255,255,255,.06);overflow:hidden}
-.metric-bar-fill{height:100%;border-radius:1px;width:0;transition:width 1.5s var(--ease-out)}
+/* ===== TECHNOLOGY GRID ===== */
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3.5rem}
+.tech-card{position:relative;padding:2.5rem;border-radius:1.25rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);backdrop-filter:blur(12px);cursor:pointer;transition:all .5s cubic-bezier(.4,0,.2,1);overflow:hidden}
+.tech-card::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .5s}.tech-card:hover::before{opacity:1}
+.tech-card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.3)}
+.tech-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.tech-icon{width:3rem;height:3rem;border-radius:.85rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:700;font-size:1.15rem}
+.tech-tag{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem}
+.tech-items{display:flex;flex-direction:column;gap:.6rem}
+.tech-item{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--text-muted)}
+.tech-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 
-/* === TECH GRID === */
-.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3rem}
-.tech-card{padding:2.25rem;border-radius:1.25rem;background:var(--card);border:1px solid rgba(255,255,255,.04);transition:all .5s;cursor:pointer}
-.tech-card:hover{border-color:rgba(255,255,255,.08);transform:translateY(-3px)}
-.tech-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1.25rem}
-.tech-icon{width:2.75rem;height:2.75rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-weight:700;font-size:1.1rem}
-.tech-card h3{font-size:1.1rem;font-weight:700}.tech-tag{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.tech-items{display:flex;flex-direction:column;gap:.5rem}
-.tech-item{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--muted)}
-.tech-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+/* ===== ROADMAP ===== */
+.roadmap-container{position:relative;margin-top:4rem;padding-left:3.5rem;max-width:42rem;margin-left:auto;margin-right:auto}
+#roadmap-svg{position:absolute;left:.75rem;top:0;width:6px;height:100%;overflow:visible}
+.roadmap-item{position:relative;padding-bottom:3rem}
+.roadmap-item:last-child{padding-bottom:0}
+.rm-node{position:absolute;left:-3.2rem;top:.15rem;width:1.25rem;height:1.25rem;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .4s}
+.rm-node-inner{width:.4rem;height:.4rem;border-radius:50%;transition:all .4s}
+.roadmap-item:hover .rm-node{transform:scale(1.2)}
+.rm-date{font-size:.65rem;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem;display:flex;align-items:center;gap:.5rem}
+.rm-status{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.15rem .5rem;border-radius:.25rem}
+.roadmap-item h4{font-size:1.1rem;font-weight:700;margin-bottom:.35rem}
+.roadmap-item p{font-size:.85rem;color:var(--text-muted);line-height:1.65}
 
-/* === ROADMAP with SVG draw-on-scroll === */
-.rm-container{position:relative;margin-top:3.5rem;padding-left:3rem;max-width:40rem;margin-left:auto;margin-right:auto}
-#rm-svg{position:absolute;left:.55rem;top:0;width:4px;height:100%;overflow:visible}
-.rm-item{position:relative;padding-bottom:2.5rem}
-.rm-item:last-child{padding-bottom:0}
-.rm-dot{position:absolute;left:-2.65rem;top:.2rem;width:1rem;height:1rem;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.rm-dot-i{width:.35rem;height:.35rem;border-radius:50%}
-.rm-date{font-size:.65rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem}
-.rm-status{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-left:.4rem}
-.rm-item h4{font-size:1.05rem;font-weight:700;margin-bottom:.3rem}
-.rm-item p{font-size:.82rem;color:var(--muted);line-height:1.6}
+/* ===== CTA SECTION ===== */
+.cta-section{position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(0,255,255,.06),transparent 60%),radial-gradient(ellipse 50% 40% at 30% 60%,rgba(123,97,255,.05),transparent 50%),radial-gradient(ellipse 40% 30% at 70% 40%,rgba(255,0,255,.04),transparent 50%);animation:ctaGlow 6s ease-in-out infinite alternate}
+@keyframes ctaGlow{0%{opacity:.6}100%{opacity:1}}
 
-/* === CTA === */
-.cta-s{background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,240,255,.06),transparent 55%),radial-gradient(ellipse 50% 50% at 30% 60%,rgba(124,58,237,.04),transparent 50%),var(--bg)}
+/* ===== FOOTER ===== */
+footer{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.04);padding:3rem 1.5rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:72rem;margin:0 auto;font-size:.75rem;color:var(--text-muted)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{transition:color .25s;cursor:pointer}.footer-links a:hover{color:var(--cyan)}
 
-/* === FOOTER === */
-footer{border-top:1px solid rgba(255,255,255,.04);padding:2.5rem 1.5rem}
-.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;max-width:72rem;margin:0 auto;font-size:.7rem;color:var(--muted)}
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .pain-grid{grid-template-columns:1fr 1fr}
+  .steps-grid{grid-template-columns:1fr 1fr}
+  .step-card::after{display:none}
+  .nav-links{display:none}
+  .feature-card{flex:0 0 20rem}
+}
+@media(max-width:768px){
+  .pain-grid,.tech-grid{grid-template-columns:1fr}
+  .steps-grid,.metrics-grid{grid-template-columns:1fr 1fr}
+  .section{padding:6rem 1.25rem}
+  .feature-card{flex:0 0 85vw;min-height:auto}
+  .hero h1{font-size:clamp(2.4rem,10vw,4rem)}
+  .blob{filter:blur(60px);opacity:.08}
+}
+@media(max-width:480px){
+  .steps-grid,.metrics-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column;align-items:center}
+  .footer-inner{flex-direction:column;text-align:center}
+}
 
-/* RESPONSIVE */
-@media(max-width:1024px){.pain-grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.nav-links{display:none}.f-card{flex:0 0 18rem}}
-@media(max-width:768px){.pain-grid,.tech-grid{grid-template-columns:1fr}.steps,.metrics{grid-template-columns:1fr 1fr}.s{padding:5rem 1.25rem}.f-card{flex:0 0 85vw;min-height:auto}}
-@media(max-width:480px){.steps,.metrics{grid-template-columns:1fr}.hero-btns{flex-direction:column;align-items:center}}
-
+/* ===== REDUCED MOTION ===== */
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;animation-iteration-count:1!important}
-  [data-r]{opacity:1;transform:none}.marquee-track{animation:none}
+  [data-reveal]{opacity:1;transform:none}
+  .marquee-track{animation:none}
+  .blob{animation:none}
+  .chrome-text::before,.chrome-text::after{animation:none;display:none}
 }
 </style>
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<!-- MORPHING GRADIENT BLOBS -->
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
 
-<!-- NAV -->
+<!-- MOUSE SPOTLIGHT -->
+<div id="spotlight"></div>
+
+<!-- ===== NAV ===== -->
 <nav class="nav" id="nav">
- <div class="nav-inner">
-  <div style="display:flex;align-items:center;gap:.8rem">
-   <a href="#" class="logo">CONTENT<span>OS</span></a>
-   <div class="inception-tag"><span class="d"></span>NVIDIA Inception</div>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <a href="#" class="logo">Content<span>OS</span></a>
+      <div class="nvidia-badge"><span class="pulse"></span> NVIDIA Inception</div>
+    </div>
+    <div class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#features">Features</a>
+      <a href="#how">How It Works</a>
+      <a href="#tech">Technology</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+    <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access" class="nav-cta"><span>Get Early Access</span></a>
   </div>
-  <div class="nav-links">
-   <a href="#features">Features</a><a href="#how">How It Works</a><a href="#tech">Technology</a><a href="#roadmap">Roadmap</a>
-  </div>
-  <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access" class="nav-cta">Get Early Access</a>
- </div>
 </nav>
 
-<!-- HERO (sticky zoom-out on scroll) -->
-<div class="hero-wrap" id="hero-wrap">
- <div class="hero-sticky">
-  <div class="hero-content" id="hero-inner">
-   <div class="hero-badge"><span class="dot"></span>Private Beta &mdash; Limited Spots</div>
-   <h1>Kill the Routine.<br><span class="gradient-text">Own the Strategy.</span></h1>
-   <p class="hero-sub"><strong>ContentOS</strong> is the AI operating system that generates cinematic videos, analyzes competitors, and manages your channels &mdash; so you think bigger instead of editing longer.</p>
-   <div class="hero-btns">
-    <a href="mailto:davyd.kurochka@visionguardai.online?subject=Pilot Program" class="btn-p">Join the Pilot</a>
-    <a href="#features" class="btn-g">See How It Works</a>
-   </div>
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="orb orb-5"></div>
   </div>
- </div>
-</div>
-
-<!-- MARQUEE -->
-<div class="marquee" id="marquee-section">
- <div class="marquee-track">
-  <span class="marquee-item"><span class="marquee-dot"></span>FLUX 2 Dev</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>LTX-2.3</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>Qwen Edit</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>NVIDIA L40S</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>TensorRT-LLM</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>AWS Bedrock</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>ComfyUI</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>Claude Opus</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>NVIDIA NIM</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>FFmpeg</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>FLUX 2 Dev</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>LTX-2.3</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>Qwen Edit</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>NVIDIA L40S</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>TensorRT-LLM</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>AWS Bedrock</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>ComfyUI</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>Claude Opus</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>NVIDIA NIM</span>
-  <span class="marquee-item"><span class="marquee-dot"></span>FFmpeg</span>
- </div>
-</div>
-
-<!-- PAIN POINTS -->
-<section class="s">
- <div class="c" style="text-align:center">
-  <div class="s-label" data-r><span style="color:var(--rose)">Problem</span></div>
-  <h2 class="s-title" data-r data-d="1">YouTube Is a Full-Time Job.<br>It Shouldn't Be.</h2>
-  <p class="s-desc" style="margin:0 auto" data-r data-d="2">Creators burn 80% of their time on tasks a machine should do.</p>
- </div>
- <div class="c">
-  <div class="pain-grid">
-   <div class="pain-card" data-r>
-    <div class="pain-icon" style="background:rgba(244,63,94,.08);color:var(--rose)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-    <h3>40+ Hours/Week on Editing</h3>
-    <p>Scripting, filming, cutting, thumbnails, descriptions, tags, scheduling. Every. Single. Video.</p>
-   </div>
-   <div class="pain-card" data-r data-d="1">
-    <div class="pain-icon" style="background:rgba(0,240,255,.08);color:var(--cyan)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
-    <h3>Blind to Competitors</h3>
-    <p>By the time you notice a trend, it's peaked. Manual analytics means you're always reacting.</p>
-   </div>
-   <div class="pain-card" data-r data-d="2">
-    <div class="pain-icon" style="background:rgba(124,58,237,.08);color:var(--violet)"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg></div>
-    <h3>Burnout, Not Strategy</h3>
-    <p>When 100% of your energy goes to execution, there's nothing left for the thinking that grows your channel.</p>
-   </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-reveal><span class="dot"></span> Private Beta &mdash; Limited Spots</div>
+    <h1 data-reveal data-delay="1">
+      Kill the Routine.<br>
+      <span class="chrome-text gradient-text" data-text="Own the Strategy.">Own the Strategy.</span>
+    </h1>
+    <p class="hero-sub" data-reveal data-delay="2">
+      <strong>ContentOS</strong> is the AI operating system that generates cinematic videos, predicts virality, and manages your channels &mdash; so you focus on strategy, not editing.
+    </p>
+    <div class="hero-actions" data-reveal data-delay="3">
+      <a href="mailto:davyd.kurochka@visionguardai.online?subject=Pilot Program" class="btn-primary">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>
+        Join the Pilot
+      </a>
+      <a href="#features" class="btn-ghost">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        See How It Works
+      </a>
+    </div>
   </div>
- </div>
 </section>
 
-<hr class="glow">
+<!-- ===== MARQUEE ===== -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-sep"></span>FLUX 2 Dev</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>LTX-2.3</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Qwen Edit</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>NVIDIA L40S</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>TensorRT-LLM</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>AWS Bedrock</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>ComfyUI</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Claude Opus</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>NVIDIA NIM</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>FFmpeg</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>FLUX 2 Dev</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>LTX-2.3</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Qwen Edit</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>NVIDIA L40S</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>TensorRT-LLM</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>AWS Bedrock</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>ComfyUI</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Claude Opus</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>NVIDIA NIM</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>FFmpeg</span>
+  </div>
+</div>
 
-<!-- HORIZONTAL SCROLL FEATURES -->
-<div class="hs-header" id="features">
- <div class="c" style="text-align:center">
-  <div class="s-label" data-r><span style="color:var(--cyan)">Platform</span></div>
-  <h2 class="s-title" data-r data-d="1">Everything Automated. <span style="color:var(--cyan)">Scroll to Explore.</span></h2>
- </div>
+<!-- ===== PROBLEM ===== -->
+<section class="section" id="problem">
+  <div class="container" style="text-align:center">
+    <div class="section-label" data-reveal><span style="color:var(--rose)">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </span> The Problem</div>
+    <h2 class="section-title" data-reveal data-delay="1">YouTube Is a Full-Time Job.<br><span style="color:var(--text-muted)">It Shouldn't Be.</span></h2>
+    <p class="section-desc" style="margin:0 auto" data-reveal data-delay="2">Creators burn 80% of their time on tasks a machine should handle.</p>
+  </div>
+  <div class="container">
+    <div class="pain-grid">
+      <div class="glass-card" data-reveal>
+        <div class="card-icon" style="color:var(--rose);border-color:rgba(244,63,94,.15);background:rgba(244,63,94,.05)">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>40+ Hours/Week on Editing</h3>
+        <p>Scripting, filming, cutting, thumbnails, descriptions, tags, scheduling. Every. Single. Video. You didn't start a channel to become a video factory.</p>
+      </div>
+      <div class="glass-card" data-reveal data-delay="1">
+        <div class="card-icon" style="color:var(--cyan);border-color:rgba(0,255,255,.15);background:rgba(0,255,255,.05)">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        </div>
+        <h3>Blind to Competitors</h3>
+        <p>By the time you notice a trend, it's peaked. Manual analytics means you're always reacting, never leading.</p>
+      </div>
+      <div class="glass-card" data-reveal data-delay="2">
+        <div class="card-icon" style="color:var(--purple);border-color:rgba(123,97,255,.15);background:rgba(123,97,255,.05)">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <h3>Burnout, Not Strategy</h3>
+        <p>When 100% of your energy goes to execution, there's nothing left for the thinking that actually grows your channel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><hr class="glow-line"></div>
+
+<!-- ===== FEATURES HORIZONTAL SCROLL ===== -->
+<div class="features-header" id="features">
+  <div class="container" style="text-align:center">
+    <div class="section-label" data-reveal><span style="color:var(--cyan)">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 8 6 4-6 4V8z"/></svg>
+    </span> Platform</div>
+    <h2 class="section-title" data-reveal data-delay="1">Everything Automated.<br><span class="gradient-text">Scroll to Explore.</span></h2>
+  </div>
 </div>
 <div class="hs-wrap" id="hs-wrap">
- <div class="hs-sticky">
-  <div class="hs-track" id="hs-track">
-   <!-- Card 1 -->
-   <div class="f-card" style="flex:0 0 26rem">
-    <div class="f-label" style="color:var(--cyan)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m10 8 6 4-6 4V8z"/></svg> Core Engine</div>
-    <h3>AI Video Generation</h3>
-    <p>Cinematic quality from a text prompt. Multi-model pipeline: image generation, scene compositing, video synthesis. Pixar-level animated content, fully autonomous.</p>
-    <div class="f-tags"><span class="f-tag">4K</span><span class="f-tag">10+ Min</span><span class="f-tag">Character Consistency</span><span class="f-tag">Multi-Scene</span></div>
-   </div>
-   <!-- Card 2 -->
-   <div class="f-card">
-    <div class="f-label" style="color:var(--violet)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg> World Building</div>
-    <h3>Universe System</h3>
-    <p>Persistent worlds with characters, locations, props. Visual consistency across all videos. 8-angle turntables, panoramic locations, style templates.</p>
-   </div>
-   <!-- Card 3 -->
-   <div class="f-card">
-    <div class="f-label" style="color:var(--green)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Intelligence</div>
-    <h3>ViralScore</h3>
-    <p>Predictive analytics engine. Scores your content before you publish. Real-time trend detection. Niche opportunity discovery across millions of data points.</p>
-   </div>
-   <!-- Card 4 -->
-   <div class="f-card">
-    <div class="f-label" style="color:var(--rose)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg> Automation</div>
-    <h3>Competitor Radar</h3>
-    <p>Track any channel automatically. Detect emerging trends and content gaps. Actionable insights delivered before competitors see them.</p>
-   </div>
-   <!-- Card 5 -->
-   <div class="f-card">
-    <div class="f-label" style="color:var(--gold)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg> End-to-End</div>
-    <h3>Zero-Touch Publish</h3>
-    <p>AI writes SEO titles, descriptions, tags. Generates thumbnails. Schedules at optimal time. You approve. That's it.</p>
-   </div>
-   <!-- Card 6 -->
-   <div class="f-card">
-    <div class="f-label" style="color:var(--cyan)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> Discovery</div>
-    <h3>Niche Hunter</h3>
-    <p>Untapped niches with high demand and low competition. AI scans millions of data points to surface opportunities you'd never find manually.</p>
-   </div>
-   <!-- Card 7 -->
-   <div class="f-card">
-    <div class="f-label" style="color:var(--violet)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Multi-Channel</div>
-    <h3>Channel Empire</h3>
-    <p>Multiple YouTube channels from one dashboard. Each with its own Universe, strategy, voice. All orchestrated by a single AI director.</p>
-   </div>
+  <div class="hs-sticky">
+    <div class="hs-track" id="hs-track">
+      <div class="feature-card" style="flex:0 0 28rem">
+        <div class="f-label" style="color:var(--cyan)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m10 8 6 4-6 4V8z"/></svg> Core Engine</div>
+        <h3>AI Video Generation</h3>
+        <p>Cinematic quality from a text prompt. Multi-model pipeline orchestrates image generation, scene compositing, and video synthesis. Pixar-level animated content, fully autonomous.</p>
+        <div class="f-tags"><span class="f-tag">4K Output</span><span class="f-tag">10+ Minutes</span><span class="f-tag">Character Consistency</span><span class="f-tag">Multi-Scene</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="f-label" style="color:var(--purple)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg> World Building</div>
+        <h3>Universe System</h3>
+        <p>Persistent worlds with characters, locations, props. Visual consistency across every video. 8-angle turntables, panoramic locations, style templates.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-label" style="color:var(--green)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Intelligence</div>
+        <h3>ViralScore Engine</h3>
+        <p>Predictive analytics that scores your content before publish. Real-time trend detection. Niche opportunity discovery across millions of data points.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-label" style="color:var(--rose)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg> Automation</div>
+        <h3>Competitor Radar</h3>
+        <p>Track any channel automatically. Detect emerging trends and content gaps. Actionable insights delivered before your competitors see them.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-label" style="color:var(--gold)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg> End-to-End</div>
+        <h3>Zero-Touch Publish</h3>
+        <p>AI writes SEO titles, descriptions, tags. Generates thumbnails. Schedules at the optimal time. You approve &mdash; that's it.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-label" style="color:var(--cyan)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> Discovery</div>
+        <h3>Niche Hunter</h3>
+        <p>Untapped niches with high demand and low competition. AI scans millions of data points to surface opportunities you'd never find manually.</p>
+      </div>
+      <div class="feature-card">
+        <div class="f-label" style="color:var(--purple)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Multi-Channel</div>
+        <h3>Channel Empire</h3>
+        <p>Multiple YouTube channels from one dashboard. Each with its own Universe, strategy, voice. All orchestrated by a single AI director.</p>
+      </div>
+    </div>
   </div>
- </div>
 </div>
 
-<!-- HOW IT WORKS -->
-<section class="s" id="how">
- <div class="c" style="text-align:center">
-  <div class="s-label" data-r><span style="color:var(--cyan)">Workflow</span></div>
-  <h2 class="s-title" data-r data-d="1">Idea to Upload. <span style="color:var(--cyan)">Four Steps.</span></h2>
- </div>
- <div class="c">
-  <div class="steps">
-   <div class="step" data-r><div class="step-n">01</div><h3>Describe Your Vision</h3><p>"A 12-min animated story about a robot learning empathy, Pixar style." That's all ContentOS needs.</p></div>
-   <div class="step" data-r data-d="1"><div class="step-n">02</div><h3>AI Plans Production</h3><p>Director AI decomposes the story into scenes, plans cameras, picks Universe locations, builds Shot Graph.</p></div>
-   <div class="step" data-r data-d="2"><div class="step-n">03</div><h3>GPU Cluster Renders</h3><p>4 NVIDIA L40S GPUs render keyframes, composite characters, generate video segments in parallel.</p></div>
-   <div class="step" data-r data-d="3"><div class="step-n">04</div><h3>Review & Publish</h3><p>Watch, approve. SEO, thumbnail, scheduling done. You're already planning the next video.</p></div>
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section" id="how">
+  <div class="container" style="text-align:center">
+    <div class="section-label" data-reveal><span style="color:var(--cyan)">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+    </span> Workflow</div>
+    <h2 class="section-title" data-reveal data-delay="1">Idea to Upload.<br><span class="gradient-text">Four Steps.</span></h2>
   </div>
- </div>
-</section>
-
-<!-- METRICS -->
-<section class="s" style="background:var(--surface)">
- <div class="c">
-  <hr class="glow" style="margin-bottom:4rem">
-  <div class="metrics">
-   <div class="metric" data-r>
-    <div class="metric-v" style="color:var(--cyan)" data-count="5">0</div>
-    <div class="metric-l">AI Models Orchestrated</div>
-    <div class="metric-bar"><div class="metric-bar-fill" data-bar="100" style="background:var(--cyan)"></div></div>
-   </div>
-   <div class="metric" data-r data-d="1">
-    <div class="metric-v" data-count="4">0</div>
-    <div class="metric-l">GPUs Rendering in Parallel</div>
-    <div class="metric-bar"><div class="metric-bar-fill" data-bar="80" style="background:var(--violet)"></div></div>
-   </div>
-   <div class="metric" data-r data-d="2">
-    <div class="metric-v" data-count="10">0</div>
-    <div class="metric-l">Minutes of Video Per Run</div>
-    <div class="metric-bar"><div class="metric-bar-fill" data-bar="65" style="background:var(--green)"></div></div>
-   </div>
-   <div class="metric" data-r data-d="3">
-    <div class="metric-v" style="color:var(--green)">~0h</div>
-    <div class="metric-l">Daily Routine Left</div>
-    <div class="metric-bar"><div class="metric-bar-fill" data-bar="5" style="background:var(--rose)"></div></div>
-   </div>
-  </div>
- </div>
-</section>
-
-<!-- TECHNOLOGY -->
-<section class="s" id="tech">
- <div class="c" style="text-align:center">
-  <div class="s-label" data-r><span style="color:var(--green)">Infrastructure</span></div>
-  <h2 class="s-title" data-r data-d="1">Built for Scale. Built to Last.</h2>
-  <p class="s-desc" style="margin:0 auto" data-r data-d="2">Enterprise-grade stack powering the world's most demanding AI workloads.</p>
- </div>
- <div class="c">
-  <div class="tech-grid">
-   <div class="tech-card" data-r>
-    <div class="tech-head"><div class="tech-icon" style="background:rgba(118,185,0,.1);border:1px solid rgba(118,185,0,.15);color:var(--green)">N</div><div><h3>NVIDIA</h3><div class="tech-tag" style="color:var(--green)">Inception Partner</div></div></div>
-    <div class="tech-items">
-     <div class="tech-item"><span class="tech-dot" style="background:var(--green)"></span>4x L40S 48GB parallel rendering</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--green)"></span>TensorRT-LLM optimized inference</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--green)"></span>NVIDIA NIM containers</div>
+  <div class="container">
+    <div class="steps-grid">
+      <div class="step-card" data-reveal>
+        <div class="step-num">01</div>
+        <h3>Describe Your Vision</h3>
+        <p>"A 12-min animated story about a robot learning empathy, Pixar style." That's all ContentOS needs.</p>
+      </div>
+      <div class="step-card" data-reveal data-delay="1">
+        <div class="step-num">02</div>
+        <h3>AI Plans Production</h3>
+        <p>Director AI decomposes the story into scenes, plans cameras, picks Universe locations, builds Shot Graph.</p>
+      </div>
+      <div class="step-card" data-reveal data-delay="2">
+        <div class="step-num">03</div>
+        <h3>GPU Cluster Renders</h3>
+        <p>4 NVIDIA L40S GPUs render keyframes, composite characters, generate video segments in parallel.</p>
+      </div>
+      <div class="step-card" data-reveal data-delay="3">
+        <div class="step-num">04</div>
+        <h3>Review & Publish</h3>
+        <p>Watch the result. SEO, thumbnail, scheduling &mdash; already done. You're planning the next video.</p>
+      </div>
     </div>
-   </div>
-   <div class="tech-card" data-r data-d="1">
-    <div class="tech-head"><div class="tech-icon" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.15);color:var(--gold)">A</div><div><h3>AWS</h3><div class="tech-tag" style="color:var(--gold)">Compute Partner</div></div></div>
-    <div class="tech-items">
-     <div class="tech-item"><span class="tech-dot" style="background:var(--gold)"></span>EC2 GPU instances, auto-scaling</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--gold)"></span>Bedrock foundation models</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--gold)"></span>S3 + CloudFront delivery</div>
-    </div>
-   </div>
-   <div class="tech-card" data-r data-d="1">
-    <div class="tech-head"><div class="tech-icon" style="background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.15);color:var(--cyan)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3l1.9 5.8h6.1l-4.9 3.6 1.9 5.8L12 14.6l-4.9 3.6 1.9-5.8L4 8.8h6.1z"/></svg></div><div><h3>AI Pipeline</h3><div class="tech-tag" style="color:var(--cyan)">Multi-Model</div></div></div>
-    <div class="tech-items">
-     <div class="tech-item"><span class="tech-dot" style="background:var(--cyan)"></span>FLUX 2 Dev &mdash; image generation</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--cyan)"></span>Qwen Edit &mdash; scene compositing</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--cyan)"></span>LTX-2.3 &mdash; video synthesis</div>
-    </div>
-   </div>
-   <div class="tech-card" data-r data-d="2">
-    <div class="tech-head"><div class="tech-icon" style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.15);color:var(--violet)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2z"/></svg></div><div><h3>Orchestration</h3><div class="tech-tag" style="color:var(--violet)">ComfyUI Engine</div></div></div>
-    <div class="tech-items">
-     <div class="tech-item"><span class="tech-dot" style="background:var(--violet)"></span>Shot Graph scene planning</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--violet)"></span>Director AI production</div>
-     <div class="tech-item"><span class="tech-dot" style="background:var(--violet)"></span>Work-stealing GPU scheduler</div>
-    </div>
-   </div>
   </div>
- </div>
 </section>
 
-<!-- ROADMAP -->
-<section class="s" id="roadmap" style="background:var(--surface)">
- <div class="c" style="text-align:center">
-  <div class="s-label" data-r><span style="color:var(--violet)">Vision</span></div>
-  <h2 class="s-title" data-r data-d="1">Roadmap <span style="color:var(--muted)">2025 &mdash; 2027</span></h2>
- </div>
- <div class="c">
-  <div class="rm-container">
-   <svg id="rm-svg" preserveAspectRatio="none"><line id="rm-line" x1="2" y1="0" x2="2" y2="100%" stroke="url(#rm-grad)" stroke-width="2" stroke-dasharray="2000" stroke-dashoffset="2000"/><defs><linearGradient id="rm-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--cyan)"/><stop offset="50%" stop-color="var(--violet)"/><stop offset="100%" stop-color="var(--rose)"/></linearGradient></defs></svg>
-
-   <div class="rm-item" data-r><div class="rm-dot" style="background:rgba(0,240,255,.12);border:2px solid var(--cyan)"><div class="rm-dot-i" style="background:var(--cyan)"></div></div><div class="rm-date">Q1 2025 <span class="rm-status" style="color:var(--cyan)">Done</span></div><h4>Research & Foundation</h4><p>Core architecture. FLUX 2 integration. ComfyUI engine. EC2 GPU infra.</p></div>
-   <div class="rm-item" data-r data-d="1"><div class="rm-dot" style="background:rgba(0,240,255,.12);border:2px solid var(--cyan)"><div class="rm-dot-i" style="background:var(--cyan)"></div></div><div class="rm-date">Q2 2025 <span class="rm-status" style="color:var(--cyan)">Done</span></div><h4>Alpha &mdash; Core Pipeline</h4><p>Multi-model pipeline. Universe v1. Character refs. 4-GPU parallel rendering.</p></div>
-   <div class="rm-item" data-r data-d="1"><div class="rm-dot" style="background:rgba(0,240,255,.12);border:2px solid var(--cyan)"><div class="rm-dot-i" style="background:var(--cyan)"></div></div><div class="rm-date">Q3&ndash;Q4 2025 <span class="rm-status" style="color:var(--cyan)">Done</span></div><h4>Beta &mdash; Universe & Director</h4><p>Turntables. Shot Graph. Director State Machine. Multi-char compositing. ViralScore v1.</p></div>
-   <div class="rm-item" data-r data-d="2"><div class="rm-dot" style="background:rgba(118,185,0,.12);border:2px solid var(--green)"><div class="rm-dot-i" style="background:var(--green)"></div></div><div class="rm-date">Q1 2026 <span class="rm-status" style="color:var(--green)">Done</span></div><h4>v1.0 &mdash; Platform Launch</h4><p>10+ min generation. Smart publishing. YouTube OAuth. Channel management.</p></div>
-   <div class="rm-item" data-r data-d="2"><div class="rm-dot" style="background:rgba(244,63,94,.12);border:2px solid var(--rose);box-shadow:0 0 10px rgba(244,63,94,.25)"><div class="rm-dot-i" style="background:var(--rose)"></div></div><div class="rm-date">Q2 2026 <span class="rm-status" style="color:var(--rose)">In Progress</span></div><h4>ViralScore 2.0</h4><p>Predictive engine. Real-time trends. Niche discovery. Multi-channel optimization.</p></div>
-   <div class="rm-item" data-r data-d="3"><div class="rm-dot" style="background:rgba(255,255,255,.04);border:2px solid var(--dim)"><div class="rm-dot-i" style="background:var(--dim)"></div></div><div class="rm-date">Q3 2026</div><h4>Enterprise API</h4><p>Public REST API. Cloud rendering. Multi-tenant GPUs. SLA guarantees.</p></div>
-   <div class="rm-item" data-r data-d="3"><div class="rm-dot" style="background:rgba(255,255,255,.04);border:2px solid var(--dim)"><div class="rm-dot-i" style="background:var(--dim)"></div></div><div class="rm-date">Q4 2026</div><h4>Studio Pro</h4><p>Editing timeline. Real-time collab. Model fine-tuning. Voice cloning. Multi-language.</p></div>
-   <div class="rm-item" data-r data-d="4"><div class="rm-dot" style="background:rgba(255,255,255,.04);border:2px solid var(--dim)"><div class="rm-dot-i" style="background:var(--dim)"></div></div><div class="rm-date">H1 2027</div><h4>Global Scale</h4><p>US/EU/APAC GPU clusters. Edge rendering. Sub-minute generation. Marketplace.</p></div>
-   <div class="rm-item" data-r data-d="5"><div class="rm-dot" style="background:rgba(255,255,255,.04);border:2px solid var(--dim)"><div class="rm-dot-i" style="background:var(--dim)"></div></div><div class="rm-date">H2 2027</div><h4>Ecosystem</h4><p>Plugin marketplace. Creator SDK. TikTok & Reels pipeline. Brand partnerships.</p></div>
+<!-- ===== METRICS ===== -->
+<section class="section" style="background:rgba(255,255,255,.01)">
+  <div class="container">
+    <div class="container"><hr class="glow-line" style="margin-bottom:4rem"></div>
+    <div class="metrics-grid">
+      <div class="metric-card" data-reveal>
+        <div class="metric-value" style="color:var(--cyan)" data-count="5">0</div>
+        <div class="metric-label">AI Models Orchestrated</div>
+        <div class="metric-bar"><div class="metric-bar-fill" data-bar="100" style="background:linear-gradient(90deg,var(--cyan),var(--purple))"></div></div>
+      </div>
+      <div class="metric-card" data-reveal data-delay="1">
+        <div class="metric-value" data-count="4">0</div>
+        <div class="metric-label">GPUs Rendering in Parallel</div>
+        <div class="metric-bar"><div class="metric-bar-fill" data-bar="80" style="background:linear-gradient(90deg,var(--purple),var(--magenta))"></div></div>
+      </div>
+      <div class="metric-card" data-reveal data-delay="2">
+        <div class="metric-value" data-count="10">0</div>
+        <div class="metric-label">Minutes of Video Per Run</div>
+        <div class="metric-bar"><div class="metric-bar-fill" data-bar="65" style="background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+      </div>
+      <div class="metric-card" data-reveal data-delay="3">
+        <div class="metric-value" style="color:var(--green)">~0h</div>
+        <div class="metric-label">Daily Routine Left</div>
+        <div class="metric-bar"><div class="metric-bar-fill" data-bar="5" style="background:var(--rose)"></div></div>
+      </div>
+    </div>
   </div>
- </div>
 </section>
 
-<!-- CTA -->
-<section class="s cta-s">
- <div class="c" style="text-align:center">
-  <h2 class="s-title" data-r>Stop Working <em style="color:var(--muted);font-style:normal">in</em> Your Channel.<br>Start Working <span class="gradient-text">on</span> It.</h2>
-  <p class="s-desc" style="margin:0 auto 2rem" data-r data-d="1">Limited pilot spots. Apply now.</p>
-  <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap" data-r data-d="2">
-   <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access" class="btn-p">Apply for Early Access</a>
-   <a href="mailto:davyd.kurochka@visionguardai.online?subject=Partnership" class="btn-g">Partnership</a>
+<!-- ===== TECHNOLOGY ===== -->
+<section class="section" id="tech">
+  <div class="container" style="text-align:center">
+    <div class="section-label" data-reveal><span style="color:var(--green)">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M20 15h2M9 2v2M9 20v2M2 9h2M20 9h2"/></svg>
+    </span> Infrastructure</div>
+    <h2 class="section-title" data-reveal data-delay="1">Built for Scale.<br><span style="color:var(--text-muted)">Built to Last.</span></h2>
+    <p class="section-desc" style="margin:0 auto" data-reveal data-delay="2">Enterprise-grade stack powering the world's most demanding AI video workloads.</p>
   </div>
- </div>
+  <div class="container">
+    <div class="tech-grid">
+      <div class="tech-card" data-reveal style="--hover-color:var(--green)">
+        <div class="tech-header">
+          <div class="tech-icon" style="background:rgba(118,185,0,.08);border:1px solid rgba(118,185,0,.15);color:var(--green)">N</div>
+          <div><h3>NVIDIA</h3><div class="tech-tag" style="color:var(--green)">Inception Partner</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot" style="background:var(--green)"></span>4x L40S 48GB parallel rendering</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--green)"></span>TensorRT-LLM optimized inference</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--green)"></span>NVIDIA NIM microservices</div>
+        </div>
+      </div>
+      <div class="tech-card" data-reveal data-delay="1" style="--hover-color:var(--gold)">
+        <div class="tech-header">
+          <div class="tech-icon" style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.15);color:var(--gold)">A</div>
+          <div><h3>AWS</h3><div class="tech-tag" style="color:var(--gold)">Compute Partner</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot" style="background:var(--gold)"></span>EC2 GPU instances, auto-scaling</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--gold)"></span>Bedrock foundation models</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--gold)"></span>S3 + CloudFront delivery</div>
+        </div>
+      </div>
+      <div class="tech-card" data-reveal data-delay="1">
+        <div class="tech-header">
+          <div class="tech-icon" style="background:rgba(0,255,255,.08);border:1px solid rgba(0,255,255,.15);color:var(--cyan)">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
+          </div>
+          <div><h3>AI Pipeline</h3><div class="tech-tag" style="color:var(--cyan)">Multi-Model</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot" style="background:var(--cyan)"></span>FLUX 2 Dev &mdash; image generation</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--cyan)"></span>Qwen Edit &mdash; scene compositing</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--cyan)"></span>LTX-2.3 &mdash; video synthesis</div>
+        </div>
+      </div>
+      <div class="tech-card" data-reveal data-delay="2">
+        <div class="tech-header">
+          <div class="tech-icon" style="background:rgba(123,97,255,.08);border:1px solid rgba(123,97,255,.15);color:var(--purple)">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2z"/></svg>
+          </div>
+          <div><h3>Orchestration</h3><div class="tech-tag" style="color:var(--purple)">ComfyUI Engine</div></div>
+        </div>
+        <div class="tech-items">
+          <div class="tech-item"><span class="tech-dot" style="background:var(--purple)"></span>Shot Graph scene planning</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--purple)"></span>Director AI state machine</div>
+          <div class="tech-item"><span class="tech-dot" style="background:var(--purple)"></span>Work-stealing GPU scheduler</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ===== ROADMAP ===== -->
+<section class="section" id="roadmap" style="background:rgba(255,255,255,.01)">
+  <div class="container" style="text-align:center">
+    <div class="section-label" data-reveal><span style="color:var(--purple)">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+    </span> Vision</div>
+    <h2 class="section-title" data-reveal data-delay="1">Roadmap <span style="color:var(--text-muted)">2025 &mdash; 2027</span></h2>
+  </div>
+  <div class="container">
+    <div class="roadmap-container">
+      <svg id="roadmap-svg" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="rm-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--cyan)"/>
+            <stop offset="50%" stop-color="var(--purple)"/>
+            <stop offset="100%" stop-color="var(--magenta)"/>
+          </linearGradient>
+        </defs>
+        <line id="rm-line" x1="3" y1="0" x2="3" y2="100%" stroke="url(#rm-grad)" stroke-width="2" stroke-dasharray="2000" stroke-dashoffset="2000"/>
+      </svg>
+
+      <div class="roadmap-item" data-reveal>
+        <div class="rm-node" style="background:rgba(0,255,255,.1);border:2px solid var(--cyan)"><div class="rm-node-inner" style="background:var(--cyan)"></div></div>
+        <div class="rm-date">Q1 2025 <span class="rm-status" style="color:var(--cyan);background:rgba(0,255,255,.08)">Done</span></div>
+        <h4>Research & Foundation</h4>
+        <p>Core architecture. FLUX 2 integration. ComfyUI engine. EC2 GPU infrastructure.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="1">
+        <div class="rm-node" style="background:rgba(0,255,255,.1);border:2px solid var(--cyan)"><div class="rm-node-inner" style="background:var(--cyan)"></div></div>
+        <div class="rm-date">Q2 2025 <span class="rm-status" style="color:var(--cyan);background:rgba(0,255,255,.08)">Done</span></div>
+        <h4>Alpha &mdash; Core Pipeline</h4>
+        <p>Multi-model pipeline. Universe v1. Character references. 4-GPU parallel rendering.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="1">
+        <div class="rm-node" style="background:rgba(0,255,255,.1);border:2px solid var(--cyan)"><div class="rm-node-inner" style="background:var(--cyan)"></div></div>
+        <div class="rm-date">Q3&ndash;Q4 2025 <span class="rm-status" style="color:var(--cyan);background:rgba(0,255,255,.08)">Done</span></div>
+        <h4>Beta &mdash; Universe & Director</h4>
+        <p>8-angle turntables. Shot Graph pipeline. Director State Machine. Multi-char compositing. ViralScore v1.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="2">
+        <div class="rm-node" style="background:rgba(118,185,0,.1);border:2px solid var(--green)"><div class="rm-node-inner" style="background:var(--green)"></div></div>
+        <div class="rm-date">Q1 2026 <span class="rm-status" style="color:var(--green);background:rgba(118,185,0,.08)">Done</span></div>
+        <h4>v1.0 &mdash; Platform Launch</h4>
+        <p>10+ minute generation. Smart publishing. YouTube OAuth. Channel management.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="2">
+        <div class="rm-node" style="background:rgba(244,63,94,.1);border:2px solid var(--rose);box-shadow:0 0 15px rgba(244,63,94,.2)"><div class="rm-node-inner" style="background:var(--rose)"></div></div>
+        <div class="rm-date">Q2 2026 <span class="rm-status" style="color:var(--rose);background:rgba(244,63,94,.08)">In Progress</span></div>
+        <h4>ViralScore 2.0</h4>
+        <p>Predictive engine. Real-time trend detection. Niche discovery. Multi-channel optimization.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="3">
+        <div class="rm-node" style="background:rgba(255,255,255,.03);border:2px solid var(--text-dim)"><div class="rm-node-inner" style="background:var(--text-dim)"></div></div>
+        <div class="rm-date">Q3 2026</div>
+        <h4>Enterprise API</h4>
+        <p>Public REST API. Cloud rendering. Multi-tenant GPU pools. SLA guarantees.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="3">
+        <div class="rm-node" style="background:rgba(255,255,255,.03);border:2px solid var(--text-dim)"><div class="rm-node-inner" style="background:var(--text-dim)"></div></div>
+        <div class="rm-date">Q4 2026</div>
+        <h4>Studio Pro</h4>
+        <p>Editing timeline. Real-time collaboration. Model fine-tuning. Voice cloning. Multi-language.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="4">
+        <div class="rm-node" style="background:rgba(255,255,255,.03);border:2px solid var(--text-dim)"><div class="rm-node-inner" style="background:var(--text-dim)"></div></div>
+        <div class="rm-date">H1 2027</div>
+        <h4>Global Scale</h4>
+        <p>US/EU/APAC GPU clusters. Edge rendering. Sub-minute generation. Content marketplace.</p>
+      </div>
+      <div class="roadmap-item" data-reveal data-delay="5">
+        <div class="rm-node" style="background:rgba(255,255,255,.03);border:2px solid var(--text-dim)"><div class="rm-node-inner" style="background:var(--text-dim)"></div></div>
+        <div class="rm-date">H2 2027</div>
+        <h4>Ecosystem</h4>
+        <p>Plugin marketplace. Creator SDK. TikTok & Reels pipeline. Brand partnerships.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section cta-section">
+  <div class="container" style="text-align:center">
+    <h2 class="section-title" data-reveal>Stop Working <span style="color:var(--text-muted)">in</span> Your Channel.<br>Start Working <span class="gradient-text">on</span> It.</h2>
+    <p class="section-desc" style="margin:0 auto 2.5rem" data-reveal data-delay="1">Limited pilot spots. The future of content creation starts here.</p>
+    <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap" data-reveal data-delay="2">
+      <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access" class="btn-primary">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>
+        Apply for Early Access
+      </a>
+      <a href="mailto:davyd.kurochka@visionguardai.online?subject=Partnership" class="btn-ghost">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Partnership
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
 <footer>
- <div class="footer-inner">
-  <div style="display:flex;align-items:center;gap:.6rem"><span class="logo" style="font-size:.85rem">CONTENT<span>OS</span></span><span style="color:rgba(255,255,255,.08)">|</span><span style="font-size:.6rem;color:var(--green);font-weight:700;letter-spacing:.1em">NVIDIA INCEPTION</span></div>
-  <div>Kyiv &bull; San Francisco &bull; London</div>
-  <div>&copy; 2025&ndash;2026 VisionGuard AI Technologies Inc.</div>
- </div>
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <span class="logo" style="font-size:.9rem">Content<span>OS</span></span>
+      <span style="color:rgba(255,255,255,.08)">|</span>
+      <span class="nvidia-badge" style="font-size:.5rem;padding:.15rem .45rem"><span class="pulse" style="width:3px;height:3px"></span> NVIDIA Inception</span>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:davyd.kurochka@visionguardai.online">Contact</a>
+      <span style="color:var(--text-dim)">Kyiv &bull; San Francisco &bull; London</span>
+    </div>
+    <div>&copy; 2025&ndash;2026 VisionGuard AI Technologies Inc.</div>
+  </div>
 </footer>
 
 <script>
-// === PARTICLE CONSTELLATION (scroll-reactive) ===
+// ===== MOUSE SPOTLIGHT =====
 (function(){
-  const cv=document.getElementById('particles'),cx=cv.getContext('2d');
-  let W,H,mouse={x:-1,y:-1},scrollY=0,particles=[],raf;
-  const N=80,CONNECT=120,MOUSE_R=150;
+  const el = document.getElementById('spotlight');
+  let x = 0, y = 0, active = false;
+  document.addEventListener('mousemove', e => {
+    x = e.clientX; y = e.clientY;
+    if (!active) { el.classList.add('active'); active = true; }
+    el.style.background = `radial-gradient(600px circle at ${x}px ${y}px, rgba(0,255,255,.04), rgba(123,97,255,.02) 40%, transparent 70%)`;
+  });
+  document.addEventListener('mouseleave', () => { el.classList.remove('active'); active = false; });
+})();
 
-  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;init()}
-  function init(){
-    particles=[];
-    for(let i=0;i<N;i++){
-      particles.push({
-        x:Math.random()*W,y:Math.random()*H,
-        vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
-        r:Math.random()*2+1,
-        baseAlpha:.15+Math.random()*.25,
-        color:['0,240,255','124,58,237','118,185,0','244,63,94'][Math.floor(Math.random()*4)]
-      });
-    }
-  }
-  resize();
-  addEventListener('resize',resize);
-  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
-  addEventListener('mouseleave',()=>{mouse.x=-1;mouse.y=-1});
-  addEventListener('scroll',()=>{scrollY=pageYOffset},{passive:true});
+// ===== CARD IRIDESCENT BORDER (conic gradient follows mouse) =====
+(function(){
+  document.querySelectorAll('.glass-card, .feature-card, .tech-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const cx = e.clientX - rect.left - rect.width / 2;
+      const cy = e.clientY - rect.top - rect.height / 2;
+      const angle = Math.atan2(cy, cx) * (180 / Math.PI) + 180;
+      card.style.setProperty('--card-angle', angle + 'deg');
+    });
+  });
+})();
 
-  function draw(){
-    cx.clearRect(0,0,W,H);
-    // Scroll-driven: particles spread outward as you scroll
-    const spread=Math.min(scrollY/1500,1);
-    const centerX=W/2,centerY=H/2;
-
-    for(const p of particles){
-      // Apply scroll-based push from center
-      const dx=p.x-centerX,dy=p.y-centerY;
-      const dist=Math.sqrt(dx*dx+dy*dy)||1;
-      const pushX=dx/dist*spread*50;
-      const pushY=dy/dist*spread*50;
-
-      p.x+=p.vx;p.y+=p.vy;
-      // Mouse repel
-      if(mouse.x>0){
-        const mx=p.x-mouse.x,my=p.y-mouse.y;
-        const md=Math.sqrt(mx*mx+my*my);
-        if(md<MOUSE_R){const f=(1-md/MOUSE_R)*.8;p.x+=mx/md*f;p.y+=my/md*f}
+// ===== REVEAL ON SCROLL =====
+(function(){
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
       }
-      // Bounds
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+})();
 
-      const drawX=p.x+pushX;
-      const drawY=p.y+pushY;
-      const alpha=p.baseAlpha*(1-spread*.4);
+// ===== ANIMATED COUNTERS =====
+(function(){
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.count);
+      if (!target) return;
+      let current = 0;
+      const step = Math.ceil(target / 40);
+      const interval = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(interval); }
+        el.textContent = current + '+';
+      }, 40);
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => observer.observe(el));
+})();
 
-      cx.beginPath();
-      cx.arc(drawX,drawY,p.r,0,Math.PI*2);
-      cx.fillStyle=`rgba(${p.color},${alpha})`;
-      cx.fill();
-    }
+// ===== METRIC BARS =====
+(function(){
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.style.width = e.target.dataset.bar + '%';
+      observer.unobserve(e.target);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-bar]').forEach(el => observer.observe(el));
+})();
 
-    // Connections
-    const connectDist=CONNECT+spread*60;
-    for(let i=0;i<particles.length;i++){
-      const a=particles[i];
-      const ax=a.x+(a.x-centerX)/((Math.sqrt((a.x-centerX)**2+(a.y-centerY)**2)||1))*spread*50;
-      const ay=a.y+(a.y-centerY)/((Math.sqrt((a.x-centerX)**2+(a.y-centerY)**2)||1))*spread*50;
-      for(let j=i+1;j<particles.length;j++){
-        const b=particles[j];
-        const bx=b.x+(b.x-centerX)/((Math.sqrt((b.x-centerX)**2+(b.y-centerY)**2)||1))*spread*50;
-        const by=b.y+(b.y-centerY)/((Math.sqrt((b.x-centerX)**2+(b.y-centerY)**2)||1))*spread*50;
-        const d=Math.hypot(ax-bx,ay-by);
-        if(d<connectDist){
-          cx.beginPath();cx.moveTo(ax,ay);cx.lineTo(bx,by);
-          cx.strokeStyle=`rgba(0,240,255,${(.08-d/connectDist*.08)*(1-spread*.3)})`;
-          cx.lineWidth=.5;cx.stroke();
-        }
-      }
-    }
-    raf=requestAnimationFrame(draw);
+// ===== NAV SCROLL =====
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// ===== HORIZONTAL SCROLL FEATURES =====
+(function(){
+  const wrap = document.getElementById('hs-wrap');
+  const track = document.getElementById('hs-track');
+  const cards = track.children;
+
+  function totalWidth() {
+    let w = 0;
+    for (const c of cards) w += c.offsetWidth + 28;
+    return w - window.innerWidth + 80;
   }
-  if(!matchMedia('(prefers-reduced-motion:reduce)').matches)draw();
+
+  function setHeight() {
+    wrap.style.height = totalWidth() + 'px';
+  }
+
+  setHeight();
+  window.addEventListener('resize', setHeight);
+
+  window.addEventListener('scroll', () => {
+    const rect = wrap.getBoundingClientRect();
+    if (rect.top > 0 || rect.bottom < window.innerHeight) return;
+    const progress = -rect.top / (wrap.offsetHeight - window.innerHeight);
+    const x = -progress * totalWidth();
+    track.style.transform = `translateX(${x}px)`;
+  }, { passive: true });
 })();
 
-// === HERO STICKY ZOOM-OUT ===
+// ===== ROADMAP SVG LINE DRAW =====
 (function(){
-  const wrap=document.getElementById('hero-wrap');
-  const inner=document.getElementById('hero-inner');
-  addEventListener('scroll',()=>{
-    const rect=wrap.getBoundingClientRect();
-    const progress=Math.max(0,Math.min(1,-rect.top/(wrap.offsetHeight-innerHeight)));
-    const scale=1-progress*.25;
-    const opacity=1-progress*1.5;
-    const blur=progress*8;
-    inner.style.transform=`scale(${scale})`;
-    inner.style.opacity=Math.max(0,opacity);
-    inner.style.filter=`blur(${blur}px)`;
-  },{passive:true});
+  const line = document.getElementById('rm-line');
+  if (!line) return;
+  const section = line.closest('section');
+
+  window.addEventListener('scroll', () => {
+    const rect = section.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const start = vh * 0.75;
+    const end = -rect.height + vh * 0.25;
+    const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
+    line.style.strokeDashoffset = 2000 - progress * 2000;
+  }, { passive: true });
 })();
 
-// === HORIZONTAL SCROLL ===
-(function(){
-  const wrap=document.getElementById('hs-wrap');
-  const track=document.getElementById('hs-track');
-  const cards=track.children;
-  const totalW=()=>{let w=0;for(const c of cards)w+=c.offsetWidth+24;return w-innerWidth+80};
-  // Set wrap height to create scroll room
-  function setHeight(){wrap.style.height=totalW()+'px'}
-  setHeight();addEventListener('resize',setHeight);
-
-  addEventListener('scroll',()=>{
-    const rect=wrap.getBoundingClientRect();
-    if(rect.top>0||rect.bottom<innerHeight)return;
-    const progress=-rect.top/(wrap.offsetHeight-innerHeight);
-    const x=-progress*totalW();
-    track.style.transform=`translateX(${x}px)`;
-  },{passive:true});
-})();
-
-// === ROADMAP SVG LINE DRAW ===
-(function(){
-  const line=document.getElementById('rm-line');
-  if(!line)return;
-  const container=line.closest('section');
-  addEventListener('scroll',()=>{
-    const rect=container.getBoundingClientRect();
-    const viewH=innerHeight;
-    const start=viewH*.8;
-    const end=-rect.height+viewH*.3;
-    const progress=Math.max(0,Math.min(1,(start-rect.top)/(start-end)));
-    line.style.strokeDashoffset=2000-progress*2000;
-  },{passive:true});
-})();
-
-// === REVEAL ===
-const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('v');ro.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -20px 0px'});
-document.querySelectorAll('[data-r]').forEach(el=>ro.observe(el));
-
-// === COUNTERS ===
-const co=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,t=+el.dataset.count;if(!t)return;let c=0;const s=Math.ceil(t/30);const iv=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(iv)}el.textContent=c+'+'},45);co.unobserve(el)})},{threshold:.5});
-document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
-
-// === METRIC BARS ===
-const bo=new IntersectionObserver(e=>{e.forEach(x=>{if(!x.isIntersecting)return;x.target.style.width=x.target.dataset.bar+'%';bo.unobserve(x.target)})},{threshold:.5});
-document.querySelectorAll('[data-bar]').forEach(el=>bo.observe(el));
-
-// === NAV SCROLL ===
-addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',scrollY>50)},{passive:true});
+// ===== SMOOTH SCROLL FOR NAV LINKS =====
+document.querySelectorAll('.nav-links a, .btn-ghost[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
 </script>
 </body>
 </html>
