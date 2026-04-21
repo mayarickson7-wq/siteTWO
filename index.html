@@ -1,214 +1,829 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VisionGuard AI | ContentOS - GPU-Native Orchestration</title>
+    <title>ContentOS by VisionGuard AI — The Operating System for AI Content Creators</title>
+    <meta name="description" content="ContentOS eliminates the daily grind for YouTube creators. AI-powered video generation, automated analytics, and intelligent scheduling — so you can focus on strategy, not routine.">
+    <meta name="theme-color" content="#020202">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Space Grotesk', 'sans-serif'],
+                        body: ['DM Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        base: '#020202',
+                        surface: '#0a0a12',
+                        card: '#0f0f1a',
+                        neon: '#00f2ff',
+                        nvidia: '#76b900',
+                        hot: '#e11d48',
+                        muted: '#64748b',
+                    },
+                },
+            },
+        }
+    </script>
     <style>
-        :root { --nv-green: #76b900; --sky-blue: #00f2ff; }
-        
-        /* Исправление фона и пробелов */
-        html, body { 
-            margin: 0; 
-            padding: 0; 
-            width: 100%; 
-            min-height: 100vh; 
-            background-color: #020202; 
-            overflow-x: hidden;
+        html, body { margin:0; padding:0; background:#020202; overflow-x:hidden; }
+        body { font-family:'DM Sans',sans-serif; color:#f1f5f9; }
+        h1,h2,h3,h4,h5,h6 { font-family:'Space Grotesk',sans-serif; }
+
+        /* Gradient mesh */
+        .mesh-hero {
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,242,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 20%, rgba(118,185,0,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 50% 80%, rgba(225,29,72,0.04) 0%, transparent 60%),
+                #020202;
+        }
+        .mesh-mid {
+            background:
+                radial-gradient(ellipse 70% 50% at 70% 0%, rgba(0,242,255,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 10% 60%, rgba(118,185,0,0.04) 0%, transparent 60%),
+                #020202;
+        }
+        .mesh-cta {
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,242,255,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 60% at 20% 80%, rgba(118,185,0,0.06) 0%, transparent 60%),
+                #020202;
         }
 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020202; color: #ffffff; }
-        
-        .hero-gradient {
-            background: radial-gradient(circle at 50% -20%, rgba(0, 242, 255, 0.15) 0%, rgba(2, 2, 2, 1) 70%), #020202;
-            background-attachment: fixed;
-            min-height: 100vh;
+        /* Glass */
+        .glass {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .glass-hover { transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); }
+        .glass-hover:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(0,242,255,0.3);
+            box-shadow: 0 0 40px rgba(0,242,255,0.06);
         }
 
-        .nv-border { border: 1px solid rgba(118, 185, 0, 0.3); }
-        .nv-text { color: #76b900; }
-        
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .glass-panel:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--sky-blue);
-            transform: scale(1.02);
-        }
-
-        .shimmer {
-            background: linear-gradient(90deg, #fff, #888, #fff);
+        /* Glow text */
+        .glow-text {
+            background: linear-gradient(135deg, #00f2ff 0%, #76b900 50%, #00f2ff 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
+            background-clip: text;
+            animation: gradient-shift 4s ease infinite;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
         }
 
-        @keyframes shine { to { background-position: 200% center; } }
-
-        /* ЯРКИЕ БЕЙДЖИ МОДЕЛЕЙ */
-        .tech-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--sky-blue);
-            padding: 6px 16px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(0, 242, 255, 0.8);
-            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
-            text-transform: uppercase;
+        /* Neon line */
+        .neon-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,242,255,0.5), transparent);
         }
 
-        /* NEW: Inception Badge Style */
-        .inception-badge {
-            background: rgba(118, 185, 0, 0.1);
-            border: 1px solid var(--nv-green);
-            color: var(--nv-green);
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.7rem;
+        /* Badge glow */
+        .badge-glow {
+            box-shadow: 0 0 12px rgba(0,242,255,0.15), inset 0 0 12px rgba(0,242,255,0.05);
+        }
+
+        /* Floating nav */
+        .nav-float {
+            background: rgba(2,2,2,0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+        }
+        .nav-float.scrolled {
+            background: rgba(2,2,2,0.9);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        /* Reveal on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.25,0.46,0.45,0.94),
+                        transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered children */
+        .reveal-stagger .reveal-child {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal-stagger.visible .reveal-child {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pulse ring */
+        .pulse-ring {
+            animation: pulse-ring 2.5s cubic-bezier(0.215,0.61,0.355,1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(0,242,255,0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(0,242,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,242,255,0); }
+        }
+
+        /* Counter animation */
+        .counter { font-variant-numeric: tabular-nums; }
+
+        /* Bento grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 1.5rem;
+        }
+        .bento-wide { grid-column: span 2; }
+        .bento-tall { grid-row: span 2; }
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-wide, .bento-tall { grid-column: span 1; grid-row: span 1; }
+        }
+
+        /* Roadmap line */
+        .roadmap-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(0,242,255,0.5) 0%, rgba(118,185,0,0.5) 50%, rgba(225,29,72,0.3) 100%);
+        }
+
+        /* CTA button */
+        .cta-btn {
+            background: linear-gradient(135deg, #00f2ff 0%, #00c8d4 100%);
+            color: #020202;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            display: inline-flex;
-            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
+        .cta-btn:hover {
+            box-shadow: 0 0 30px rgba(0,242,255,0.4), 0 0 60px rgba(0,242,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Secondary button */
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #f1f5f9;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            border-color: rgba(0,242,255,0.5);
+            background: rgba(0,242,255,0.05);
+        }
+
+        /* reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal { opacity: 1; transform: none; }
+            .reveal-stagger .reveal-child { opacity: 1; transform: none; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020202; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
-<body class="hero-gradient">
+<body>
 
-    <header class="max-w-7xl mx-auto px-8 py-8 flex justify-between items-center">
-        <div class="flex items-center space-x-4">
-            <div class="text-2xl font-extrabold tracking-tighter">
-                VISIONGUARD<span class="text-[#00f2ff]">AI</span>
+<!-- ==================== NAV ==================== -->
+<nav id="nav" class="nav-float fixed top-4 left-4 right-4 z-50 rounded-2xl px-4 sm:px-6 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="#" class="text-xl font-heading font-bold tracking-tight">
+                VISIONGUARD<span class="text-neon">AI</span>
+            </a>
+            <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg border border-nvidia/30 bg-nvidia/5">
+                <span class="w-1.5 h-1.5 bg-nvidia rounded-full animate-pulse"></span>
+                <span class="text-[10px] font-bold tracking-widest text-nvidia uppercase">NVIDIA Inception</span>
             </div>
-            <div class="inception-badge hidden sm:flex">
-                <span class="w-1.5 h-1.5 bg-[#76b900] rounded-full mr-2 animate-pulse"></span>
-                NVIDIA Inception Member
+        </div>
+        <div class="hidden md:flex items-center gap-8 text-sm text-muted font-medium">
+            <a href="#features" class="hover:text-white transition-colors duration-200 cursor-pointer">Features</a>
+            <a href="#technology" class="hover:text-white transition-colors duration-200 cursor-pointer">Technology</a>
+            <a href="#roadmap" class="hover:text-white transition-colors duration-200 cursor-pointer">Roadmap</a>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access Request" class="cta-btn px-5 py-2 rounded-xl text-sm">
+                Get Early Access
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="mesh-hero min-h-screen flex items-center pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto w-full">
+        <div class="max-w-4xl mx-auto text-center">
+            <!-- Status badge -->
+            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-5 py-2 mb-8 badge-glow">
+                <span class="w-2 h-2 bg-neon rounded-full pulse-ring"></span>
+                <span class="text-xs font-bold tracking-widest uppercase text-slate-300">Now in Private Beta</span>
+            </div>
+
+            <!-- Heading -->
+            <h1 class="reveal text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-heading font-bold tracking-tight leading-[1.05] mb-8">
+                Zero Routine.<br>
+                <span class="glow-text">Pure Strategy.</span>
+            </h1>
+
+            <!-- Subheading -->
+            <p class="reveal text-lg sm:text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed mb-10">
+                <span class="text-white font-semibold">ContentOS</span> eliminates the daily grind for YouTube creators. AI generates your videos, analyzes competitors, and optimizes everything &mdash; so you focus on growing your empire.
+            </p>
+
+            <!-- CTA buttons -->
+            <div class="reveal flex flex-col sm:flex-row justify-center gap-4 mb-16">
+                <a href="mailto:davyd.kurochka@visionguardai.online?subject=Pilot Program" class="cta-btn px-8 py-4 rounded-xl text-base">
+                    Join the Pilot Program
+                </a>
+                <a href="#features" class="btn-outline px-8 py-4 rounded-xl text-base">
+                    See How It Works
+                </a>
+            </div>
+
+            <!-- Tech badges -->
+            <div class="reveal flex flex-wrap justify-center gap-3">
+                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-neon/20">FLUX 2 Dev</div>
+                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-neon/20">LTX-2.3</div>
+                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-nvidia/20">NVIDIA L40S</div>
+                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-nvidia/20">TensorRT-LLM</div>
+                <div class="glass rounded-xl px-4 py-2 text-xs font-bold tracking-wider text-slate-300 border border-white/10">AWS Bedrock</div>
             </div>
         </div>
-        <div class="flex items-center space-x-6">
-            <span class="hidden md:inline text-[10px] font-bold tracking-widest text-gray-500 uppercase text-xs">Status: Stealth Mode (Q2 Launch)</span>
-            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Access Request" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-[#00f2ff] transition duration-300">Request Access</a>
+    </div>
+</section>
+
+<!-- ==================== PAIN POINTS ==================== -->
+<section class="px-4 sm:px-6 lg:px-8 pb-32">
+    <div class="max-w-6xl mx-auto">
+        <div class="neon-line mb-20"></div>
+        <div class="text-center mb-16">
+            <h2 class="reveal text-3xl sm:text-4xl font-heading font-bold mb-4">YouTube is a Full-Time Job.</h2>
+            <p class="reveal text-lg text-slate-400 max-w-2xl mx-auto">Creators spend <span class="text-white font-semibold">80% of their time on repetitive tasks</span> instead of creative strategy. ContentOS flips that equation.</p>
         </div>
-    </header>
+        <div class="reveal-stagger grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="reveal-child glass glass-hover rounded-2xl p-8 text-center cursor-pointer">
+                <div class="w-12 h-12 rounded-xl bg-hot/10 border border-hot/20 flex items-center justify-center mx-auto mb-5">
+                    <i data-lucide="clock" class="w-6 h-6 text-hot"></i>
+                </div>
+                <h3 class="font-heading font-bold text-lg mb-3">Hours on Editing</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Scripting, filming, editing, thumbnails, SEO, scheduling. Every single video. Every single day.</p>
+            </div>
+            <div class="reveal-child glass glass-hover rounded-2xl p-8 text-center cursor-pointer" style="transition-delay:0.1s">
+                <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center mx-auto mb-5">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6 text-neon"></i>
+                </div>
+                <h3 class="font-heading font-bold text-lg mb-3">Blind Analytics</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Manually tracking competitors, guessing what works, missing trends until it's too late.</p>
+            </div>
+            <div class="reveal-child glass glass-hover rounded-2xl p-8 text-center cursor-pointer" style="transition-delay:0.2s">
+                <div class="w-12 h-12 rounded-xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center mx-auto mb-5">
+                    <i data-lucide="brain" class="w-6 h-6 text-nvidia"></i>
+                </div>
+                <h3 class="font-heading font-bold text-lg mb-3">No Time to Think</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Creative burnout is real. When 100% of your day is execution, strategy never happens.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <main class="max-w-6xl mx-auto px-8 pt-20 pb-32 text-center">
-        <div class="inline-flex items-center space-x-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8">
-            <span class="w-2 h-2 bg-[#76b900] rounded-full animate-pulse"></span>
-            <span class="text-xs font-bold tracking-widest uppercase text-gray-400">Official Partner: NVIDIA Inception Program</span>
+<!-- ==================== FEATURES (Bento Grid) ==================== -->
+<section id="features" class="mesh-mid px-4 sm:px-6 lg:px-8 py-32">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
+                <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Platform</span>
+            </div>
+            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4">One Platform.<br>Everything Automated.</h2>
+            <p class="reveal text-lg text-slate-400 max-w-2xl mx-auto">From concept to published video &mdash; ContentOS handles the entire pipeline while you make the creative decisions.</p>
         </div>
 
-        <h1 class="text-6xl md:text-8xl font-extrabold mb-8 tracking-tighter">
-            The Operating System for <br>
-            <span class="shimmer">AI Media Production.</span>
-        </h1>
+        <div class="bento-grid reveal-stagger">
+            <!-- AI Video Generation (wide) -->
+            <div class="reveal-child bento-wide glass glass-hover rounded-3xl p-8 flex flex-col justify-between cursor-pointer">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center">
+                            <i data-lucide="film" class="w-5 h-5 text-neon"></i>
+                        </div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Core Engine</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-2xl mb-3">AI Video Generation</h3>
+                    <p class="text-slate-400 leading-relaxed">Cinematic quality videos generated from a single text prompt. Our multi-model pipeline orchestrates FLUX 2, Qwen Edit, and LTX-2.3 to produce Pixar-level animated content autonomously.</p>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-6">
+                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">4K Output</span>
+                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">10+ Minutes</span>
+                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">Character Consistency</span>
+                    <span class="text-[10px] px-2.5 py-1 rounded-lg bg-white/5 text-slate-400 font-medium">Multi-Scene</span>
+                </div>
+            </div>
 
-        <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed mb-12">
-            VisionGuard AI presents <span class="text-white font-semibold">ContentOS</span>: A GPU-native orchestration platform. From idea to cinematic 4K video in 90 seconds.
+            <!-- Universe System (tall) -->
+            <div class="reveal-child bento-tall glass glass-hover rounded-3xl p-8 flex flex-col justify-between cursor-pointer" style="transition-delay:0.1s">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                            <i data-lucide="globe" class="w-5 h-5 text-purple-400"></i>
+                        </div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-purple-400">World Building</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-2xl mb-3">Universe System</h3>
+                    <p class="text-slate-400 leading-relaxed">Build persistent worlds with characters, locations, props, and styles. Every entity maintains visual consistency across all your videos &mdash; just like a real animation studio.</p>
+                </div>
+                <div class="space-y-3 mt-6">
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="user" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                        <span>8-angle character turntables</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                        <span>Panoramic locations</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="box" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                        <span>Prop library</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="palette" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                        <span>Visual style templates</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ViralScore Analytics -->
+            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.15s">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center">
+                        <i data-lucide="trending-up" class="w-5 h-5 text-nvidia"></i>
+                    </div>
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-nvidia">Intelligence</span>
+                </div>
+                <h3 class="font-heading font-bold text-xl mb-3">ViralScore Analytics</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">AI-powered prediction engine that analyzes market trends, competitor content, and audience behavior to architect every video for maximum retention.</p>
+            </div>
+
+            <!-- Competitor Autopilot -->
+            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.2s">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-hot/10 border border-hot/20 flex items-center justify-center">
+                        <i data-lucide="radar" class="w-5 h-5 text-hot"></i>
+                    </div>
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-hot">Automation</span>
+                </div>
+                <h3 class="font-heading font-bold text-xl mb-3">Competitor Autopilot</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Automated competitor monitoring. Track niches, detect emerging trends, and get actionable insights &mdash; before your competitors see them.</p>
+            </div>
+
+            <!-- Smart Publishing (wide) -->
+            <div class="reveal-child bento-wide glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.25s">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
+                        <i data-lucide="upload-cloud" class="w-5 h-5 text-sky-400"></i>
+                    </div>
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-sky-400">End to End</span>
+                </div>
+                <h3 class="font-heading font-bold text-2xl mb-3">Script to Publish &mdash; Zero Touch</h3>
+                <p class="text-slate-400 leading-relaxed max-w-xl">AI writes the script, generates the video, creates SEO-optimized titles and descriptions, designs thumbnails, and schedules publishing at the optimal time. Your only job: approve and watch it go live.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="px-4 sm:px-6 lg:px-8 py-32">
+    <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-20">
+            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
+                <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Workflow</span>
+            </div>
+            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold">From Idea to Upload<br>in <span class="text-neon">Four Steps</span></h2>
+        </div>
+
+        <div class="space-y-12 reveal-stagger">
+            <div class="reveal-child flex items-start gap-6 md:gap-8">
+                <div class="w-14 h-14 rounded-2xl bg-neon/10 border border-neon/20 flex items-center justify-center shrink-0">
+                    <span class="font-heading font-bold text-xl text-neon">01</span>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xl mb-2">Describe Your Vision</h3>
+                    <p class="text-slate-400 leading-relaxed">Tell ContentOS what you want in plain language. "A 12-minute animated story about a robot learning to paint, Pixar style, with three main characters." That's it.</p>
+                </div>
+            </div>
+            <div class="reveal-child flex items-start gap-6 md:gap-8" style="transition-delay:0.1s">
+                <div class="w-14 h-14 rounded-2xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center shrink-0">
+                    <span class="font-heading font-bold text-xl text-nvidia">02</span>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xl mb-2">AI Builds the Shot Graph</h3>
+                    <p class="text-slate-400 leading-relaxed">Our Director AI breaks your story into scenes, plans camera angles, selects locations from your Universe, and creates a complete production timeline &mdash; like a real film pre-production.</p>
+                </div>
+            </div>
+            <div class="reveal-child flex items-start gap-6 md:gap-8" style="transition-delay:0.2s">
+                <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+                    <span class="font-heading font-bold text-xl text-purple-400">03</span>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xl mb-2">GPU Cluster Renders</h3>
+                    <p class="text-slate-400 leading-relaxed">4 NVIDIA L40S GPUs render keyframes, composite characters into scenes, and generate video segments in parallel. Multi-model pipeline: FLUX for images, Qwen for editing, LTX for video.</p>
+                </div>
+            </div>
+            <div class="reveal-child flex items-start gap-6 md:gap-8" style="transition-delay:0.3s">
+                <div class="w-14 h-14 rounded-2xl bg-hot/10 border border-hot/20 flex items-center justify-center shrink-0">
+                    <span class="font-heading font-bold text-xl text-hot">04</span>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xl mb-2">Review, Approve, Publish</h3>
+                    <p class="text-slate-400 leading-relaxed">Watch your video, tweak if needed, and hit publish. ContentOS handles SEO, thumbnail, description, tags, and scheduling. Your content goes live while you plan the next one.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== NUMBERS ==================== -->
+<section class="px-4 sm:px-6 lg:px-8 pb-32">
+    <div class="max-w-6xl mx-auto">
+        <div class="neon-line mb-20"></div>
+        <div class="reveal-stagger grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="reveal-child">
+                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-white counter">5+</div>
+                <div class="text-sm text-slate-400">AI Models Orchestrated</div>
+            </div>
+            <div class="reveal-child" style="transition-delay:0.1s">
+                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-white counter">4x</div>
+                <div class="text-sm text-slate-400">GPU Parallel Rendering</div>
+            </div>
+            <div class="reveal-child" style="transition-delay:0.2s">
+                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-white counter">10+</div>
+                <div class="text-sm text-slate-400">Minutes Per Video</div>
+            </div>
+            <div class="reveal-child" style="transition-delay:0.3s">
+                <div class="font-heading font-bold text-4xl sm:text-5xl mb-2 text-neon counter">~0</div>
+                <div class="text-sm text-slate-400">Hours of Daily Routine</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== TECHNOLOGY ==================== -->
+<section id="technology" class="mesh-mid px-4 sm:px-6 lg:px-8 py-32">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
+                <span class="text-[10px] font-bold tracking-widest uppercase text-nvidia">Infrastructure</span>
+            </div>
+            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4">Enterprise-Grade Stack</h2>
+            <p class="reveal text-lg text-slate-400 max-w-2xl mx-auto">Built on the same infrastructure that powers the world's most demanding AI workloads.</p>
+        </div>
+
+        <div class="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- NVIDIA -->
+            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-nvidia/10 border border-nvidia/20 flex items-center justify-center">
+                        <span class="font-heading font-bold text-nvidia text-lg">N</span>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-xl">NVIDIA Acceleration</h3>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-nvidia">Inception Partner</span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="cpu" class="w-4 h-4 text-nvidia shrink-0"></i>
+                        <span>4x L40S 48GB GPUs &mdash; parallel rendering</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="zap" class="w-4 h-4 text-nvidia shrink-0"></i>
+                        <span>TensorRT-LLM for optimized inference</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="layers" class="w-4 h-4 text-nvidia shrink-0"></i>
+                        <span>NVIDIA NIM microservice containers</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AWS -->
+            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.1s">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                        <span class="font-heading font-bold text-orange-400 text-lg">A</span>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-xl">AWS Cloud</h3>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-orange-400">Compute Partner</span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="cloud" class="w-4 h-4 text-orange-400 shrink-0"></i>
+                        <span>EC2 GPU instances with auto-scaling</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="bot" class="w-4 h-4 text-orange-400 shrink-0"></i>
+                        <span>Bedrock for foundation model access</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="database" class="w-4 h-4 text-orange-400 shrink-0"></i>
+                        <span>S3 + CloudFront for asset delivery</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Models -->
+            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.15s">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-neon"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-xl">AI Model Pipeline</h3>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Multi-Model</span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="image" class="w-4 h-4 text-neon shrink-0"></i>
+                        <span>FLUX 2 Dev &mdash; reference image generation</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="pencil" class="w-4 h-4 text-neon shrink-0"></i>
+                        <span>Qwen Edit &mdash; scene compositing & editing</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="play" class="w-4 h-4 text-neon shrink-0"></i>
+                        <span>LTX-2.3 &mdash; image-to-video generation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orchestration -->
+            <div class="reveal-child glass glass-hover rounded-3xl p-8 cursor-pointer" style="transition-delay:0.2s">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                        <i data-lucide="workflow" class="w-6 h-6 text-purple-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-xl">Smart Orchestration</h3>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-purple-400">ComfyUI Engine</span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="git-branch" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                        <span>Shot Graph &mdash; automated scene planning</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="clapperboard" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                        <span>Director AI &mdash; autonomous production</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-400">
+                        <i data-lucide="gauge" class="w-4 h-4 text-purple-400 shrink-0"></i>
+                        <span>Work-stealing GPU scheduler</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== ROADMAP ==================== -->
+<section id="roadmap" class="px-4 sm:px-6 lg:px-8 py-32">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-20">
+            <div class="reveal inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
+                <span class="text-[10px] font-bold tracking-widest uppercase text-neon">Vision</span>
+            </div>
+            <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold">Roadmap <span class="text-muted">2025 &mdash; 2027</span></h2>
+        </div>
+
+        <div class="relative pl-14 reveal-stagger">
+            <div class="roadmap-line"></div>
+
+            <!-- Q1 2025 -->
+            <div class="reveal-child relative mb-12">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-neon"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q1 2025 <span class="text-neon ml-2">COMPLETED</span></div>
+                <h4 class="font-heading font-bold text-lg mb-1">Research & Foundation</h4>
+                <p class="text-sm text-slate-400">Core architecture design. FLUX 2 integration. ComfyUI workflow engine. EC2 GPU infrastructure setup.</p>
+            </div>
+
+            <!-- Q2 2025 -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.05s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-neon"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q2 2025 <span class="text-neon ml-2">COMPLETED</span></div>
+                <h4 class="font-heading font-bold text-lg mb-1">Alpha &mdash; Core Pipeline</h4>
+                <p class="text-sm text-slate-400">Multi-model pipeline (FLUX + Qwen Edit + LTX). Universe system v1. Character reference generation. 4-GPU parallel rendering.</p>
+            </div>
+
+            <!-- Q3 2025 -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.1s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-neon"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q3 2025 <span class="text-neon ml-2">COMPLETED</span></div>
+                <h4 class="font-heading font-bold text-lg mb-1">Closed Beta &mdash; Universe & Consistency</h4>
+                <p class="text-sm text-slate-400">8-angle character turntables. Panoramic locations. Shot Graph pipeline. Director State Machine. Multi-character compositing.</p>
+            </div>
+
+            <!-- Q4 2025 -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.15s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-neon/20 border-2 border-neon flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-neon"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q4 2025 <span class="text-neon ml-2">COMPLETED</span></div>
+                <h4 class="font-heading font-bold text-lg mb-1">Open Beta &mdash; Autonomous Generation</h4>
+                <p class="text-sm text-slate-400">Two-pass Shot Planner. ViralScore v1. Competitor analytics. SEO automation. TTS integration with AWS Polly.</p>
+            </div>
+
+            <!-- Q1 2026 -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.2s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-nvidia/20 border-2 border-nvidia flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-nvidia"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q1 2026 <span class="text-nvidia ml-2">COMPLETED</span></div>
+                <h4 class="font-heading font-bold text-lg mb-1">v1.0 &mdash; Full Platform Launch</h4>
+                <p class="text-sm text-slate-400">Production-ready video pipeline. 10+ minute video generation. Smart publishing. YouTube OAuth integration. Channel management.</p>
+            </div>
+
+            <!-- Q2 2026 (current) -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.25s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-hot/20 border-2 border-hot flex items-center justify-center pulse-ring">
+                    <div class="w-2 h-2 rounded-full bg-hot"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q2 2026 <span class="text-hot ml-2">IN PROGRESS</span></div>
+                <h4 class="font-heading font-bold text-lg mb-1">ViralScore 2.0 &mdash; Predictive Analytics</h4>
+                <p class="text-sm text-slate-400">AI-powered content prediction engine. Real-time trend detection via NVIDIA NIM. Niche discovery automation. Multi-channel optimization.</p>
+            </div>
+
+            <!-- Q3 2026 -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.3s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q3 2026</div>
+                <h4 class="font-heading font-bold text-lg mb-1">Enterprise API & Cloud Rendering</h4>
+                <p class="text-sm text-slate-400">Public API for enterprise clients. Cloud rendering infrastructure. Multi-tenant GPU management. SLA guarantees.</p>
+            </div>
+
+            <!-- Q4 2026 -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.35s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q4 2026</div>
+                <h4 class="font-heading font-bold text-lg mb-1">Studio Pro &mdash; Professional Suite</h4>
+                <p class="text-sm text-slate-400">Advanced editing timeline. Real-time collaboration. Custom model fine-tuning. Voice cloning integration. Multi-language output.</p>
+            </div>
+
+            <!-- Q1-Q2 2027 -->
+            <div class="reveal-child relative mb-12" style="transition-delay:0.4s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q1&ndash;Q2 2027</div>
+                <h4 class="font-heading font-bold text-lg mb-1">Global Scale &mdash; Multi-Region Deployment</h4>
+                <p class="text-sm text-slate-400">US, EU, APAC GPU clusters. Edge rendering via NVIDIA CloudXR. Sub-minute generation latency. Creator marketplace.</p>
+            </div>
+
+            <!-- Q3-Q4 2027 -->
+            <div class="reveal-child relative" style="transition-delay:0.45s">
+                <div class="absolute -left-[38px] w-6 h-6 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-white/30"></div>
+                </div>
+                <div class="text-xs font-bold text-muted mb-1">Q3&ndash;Q4 2027</div>
+                <h4 class="font-heading font-bold text-lg mb-1">Ecosystem &mdash; Platform & Integrations</h4>
+                <p class="text-sm text-slate-400">Plugin marketplace. Third-party model integrations. Creator tools SDK. TikTok and Instagram Reels pipeline. Brand partnership network.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section class="mesh-cta px-4 sm:px-6 lg:px-8 py-32">
+    <div class="max-w-3xl mx-auto text-center">
+        <h2 class="reveal text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-6">
+            Ready to Stop<br>Working <span class="glow-text">in</span> Your Channel<br>and Start Working <span class="glow-text">on</span> It?
+        </h2>
+        <p class="reveal text-lg text-slate-400 mb-10 max-w-xl mx-auto">
+            We're onboarding a limited number of creators for our pilot program. Apply for early access and be among the first to automate your entire workflow.
         </p>
-
-        <div class="flex flex-wrap justify-center gap-4 mb-20">
-            <div class="tech-badge">GEMINI 2.5 FLASH</div>
-            <div class="tech-badge">VEO 3.1</div>
-            <div class="tech-badge">IMAGEN 3</div>
-            <div class="tech-badge">NVIDIA NIM</div>
-            <div class="tech-badge">TENSORRT-LLM</div>
+        <div class="reveal flex flex-col sm:flex-row justify-center gap-4">
+            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Early Access Application" class="cta-btn px-10 py-4 rounded-xl text-base">
+                Apply for Early Access
+            </a>
+            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Partnership Inquiry" class="btn-outline px-10 py-4 rounded-xl text-base">
+                Partnership Inquiries
+            </a>
         </div>
+    </div>
+</section>
 
-        <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
-            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Pilot Program Inquiry" class="px-10 py-4 bg-[#00f2ff] text-black font-bold rounded-xl hover:shadow-[0_0_30px_rgba(0,242,255,0.6)] transition">Start Pilot Program</a>
-            <a href="mailto:davyd.kurochka@visionguardai.online?subject=Founders Contact" class="px-10 py-4 glass-panel font-bold rounded-xl text-center text-white">Contact Founders</a>
-        </div>
-    </main>
-
-    <section class="max-w-7xl mx-auto px-8 pb-32">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            <div class="glass-panel p-10 rounded-3xl">
-                <div class="text-[#76b900] font-bold text-sm mb-4">ENGINE</div>
-                <h3 class="text-2xl font-bold mb-4 text-white">Multimodal Orchestration</h3>
-                <p class="text-gray-500 leading-relaxed">
-                    Our proprietary pipeline synchronizes 5+ foundation models simultaneously. We handle the complexity of script-to-video diffusion so you focus on the vision.
-                </p>
-            </div>
-            <div class="glass-panel p-10 rounded-3xl">
-                <div class="text-[#00f2ff] font-bold text-sm mb-4">EFFICIENCY</div>
-                <h3 class="text-2xl font-bold mb-4 text-white">60% COGS Reduction</h3>
-                <p class="text-gray-500 leading-relaxed">
-                    By offloading lightweight tasks to local RTX GPUs using TensorRT, ContentOS slashes cloud compute costs while maintaining enterprise-grade quality.
-                </p>
-            </div>
-            <div class="glass-panel p-10 rounded-3xl">
-                <div class="text-purple-500 font-bold text-sm mb-4">SCALE</div>
-                <h3 class="text-2xl font-bold mb-4 text-white">ViralScore Analytics</h3>
-                <p class="text-gray-500 leading-relaxed">
-                    Beyond generation: our models analyze market trends in real-time to ensure every video is architected for maximum audience retention.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="max-w-7xl mx-auto px-8 pb-32">
-        <h3 class="text-center text-3xl font-bold mb-12 text-white uppercase tracking-widest">Roadmap 2026</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
-            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-[#76b900]">
-                <div class="text-xs font-bold text-gray-500 mb-2">Q1 2026</div>
-                <div class="font-bold mb-2 text-white">Alpha Core</div>
-                <p class="text-[11px] text-gray-400">Integration of Veo 3.1 & Gemini 2.5 Flash. Internal testing of ContentOS engine.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-[#00f2ff]">
-                <div class="text-xs font-bold text-gray-500 mb-2">Q2 2026</div>
-                <div class="font-bold mb-2 text-white">Beta Launch</div>
-                <p class="text-[11px] text-gray-400">Infrastructure scaling on NVIDIA H100 clusters. Pilot for YouTube creators.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-purple-500">
-                <div class="text-xs font-bold text-gray-500 mb-2">Q3 2026</div>
-                <div class="font-bold mb-2 text-white">ViralScore 2.0</div>
-                <p class="text-[11px] text-gray-400">Deployment of analytics models via NVIDIA NIM containers.</p>
-            </div>
-            <div class="glass-panel p-6 rounded-2xl border-l-2 border-l-white">
-                <div class="text-xs font-bold text-gray-500 mb-2">Q4 2026</div>
-                <div class="font-bold mb-2 text-white">Global API</div>
-                <p class="text-[11px] text-gray-400">Public release of API for enterprise-grade 4K neural rendering.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="max-w-5xl mx-auto px-8 pb-32 text-left">
-        <div class="bg-gradient-to-b from-white/5 to-transparent p-12 rounded-[40px] border border-white/10">
-            <h2 class="text-3xl font-bold mb-12 text-center text-white">Built on the NVIDIA-Google Stack</h2>
-            <div class="space-y-8 max-w-2xl mx-auto">
-                <div class="flex items-start space-x-6">
-                    <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 font-bold text-[#00f2ff]">01</div>
-                    <div>
-                        <h4 class="font-bold text-lg text-white text-left">Inference at Scale</h4>
-                        <p class="text-gray-500 text-left">Leveraging Vertex AI to deploy Veo 3.1 and Gemini 2.5 Flash for ultra-low latency multimodal generation.</p>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-6">
-                    <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 font-bold text-[#76b900]">02</div>
-                    <div>
-                        <h4 class="font-bold text-lg text-white text-left">NVIDIA Acceleration</h4>
-                        <p class="text-gray-500 text-left">Integration with TensorRT-LLM and NVIDIA NIM to optimize our custom ViralScore model inference.</p>
-                    </div>
+<!-- ==================== FOOTER ==================== -->
+<footer class="px-4 sm:px-6 lg:px-8 py-12 border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <span class="font-heading font-bold text-lg tracking-tight">VISIONGUARD<span class="text-neon">AI</span></span>
+                <div class="flex items-center gap-2 px-3 py-1 rounded-lg border border-nvidia/30 bg-nvidia/5">
+                    <span class="w-1.5 h-1.5 bg-nvidia rounded-full"></span>
+                    <span class="text-[9px] font-bold tracking-widest text-nvidia uppercase">NVIDIA Inception</span>
                 </div>
             </div>
+            <div class="flex items-center gap-6 text-xs text-muted">
+                <a href="mailto:davyd.kurochka@visionguardai.online" class="hover:text-white transition-colors duration-200 cursor-pointer">Contact</a>
+                <span class="text-white/10">|</span>
+                <span>Kyiv &bull; San Francisco &bull; London</span>
+            </div>
+            <div class="text-[10px] text-muted/60 tracking-widest uppercase">
+                &copy; 2025&ndash;2026 VisionGuard AI Technologies Inc.
+            </div>
         </div>
-    </section>
+    </div>
+</footer>
 
-    <footer class="max-w-7xl mx-auto px-8 py-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-gray-600 text-[10px] uppercase tracking-[3px]">
-        <div>VisionGuard AI Technologies Inc. © 2026 • NVIDIA Inception Member</div>
-        <div>Kyiv • San Francisco • London</div>
-    </footer>
+<!-- ==================== SCRIPTS ==================== -->
+<script>
+    // Initialize Lucide icons
+    lucide.createIcons();
 
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Intersection Observer for reveal animations
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // Staggered children animation
+    const staggerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const children = entry.target.querySelectorAll('.reveal-child');
+                children.forEach((child, i) => {
+                    child.style.transitionDelay = child.style.transitionDelay || `${i * 0.1}s`;
+                });
+                entry.target.classList.add('visible');
+                staggerObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-stagger').forEach(el => {
+        staggerObserver.observe(el);
+    });
+</script>
 </body>
 </html>
